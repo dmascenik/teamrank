@@ -24,7 +24,29 @@ public class PageRank {
    * Gather the necessary data from the console.
    */
   public void start(Console c) {
-    Map<String,ArrayList<String>> voteMap = new HashMap<String,ArrayList<String>>();
+	/*
+	 * Collect the names of the team members to use for validation later
+	 */
+    System.out.println("TeamRank - Provide the names of team members to begin...");
+    List<String> names = new ArrayList<String>();
+    while (true) {
+    	String name = c.readLine("Enter a name - or (d)one:");
+    	if (name == null || name.trim().equals("")) {
+    	  continue;
+    	}
+    	name = name.trim();
+    	if (name.equals("d") && names.size() > 0) {
+    	  break;
+    	} else {
+    		if (names.contains(name)) {
+    		  System.out.println(name+" already present - duplicates not allowed");
+    		  continue;
+    		}
+    		names.add(name);
+    	}
+    }
+	  
+	Map<String,ArrayList<String>> voteMap = new HashMap<String,ArrayList<String>>();
     String voter = null;
     while (true) {
       voter = c.readLine("Enter voter name - or (d)one: ");
@@ -34,6 +56,10 @@ public class PageRank {
       voter = voter.trim();
       if (voter.equals("d")) {
         break;
+      }
+      if (!names.contains(voter)) {
+    	  System.out.println("Unknown team member: "+voter);
+    	  continue;
       }
       ArrayList<String> votes = voteMap.get(voter);
       if (votes == null) {
@@ -49,6 +75,10 @@ public class PageRank {
         vote = vote.trim();
         if (vote.equals("d")) {
           break;
+        }
+        if (!names.contains(vote)) {
+      	  System.out.println("Unknown team member: "+vote);
+      	  continue;
         }
         votes.add(vote);
       }
