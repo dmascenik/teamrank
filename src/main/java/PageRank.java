@@ -7,10 +7,12 @@ import java.util.Map;
 import java.util.Set;
 
 public class PageRank {
-
+	
   private static final float BREAKOUT_PROBABILITY = 0.85f;
   private static boolean debug = false;
 
+  private List<String> teamMembers = new ArrayList<String>();
+  
   public static void main(String[] args) {
     Console c = System.console();
     if (c == null) {
@@ -24,7 +26,28 @@ public class PageRank {
    * Gather the necessary data from the console.
    */
   public void start(Console c) {
-    Map<String,ArrayList<String>> voteMap = new HashMap<String,ArrayList<String>>();
+	/*
+	 * Collect the names of the team members to use for validation later
+	 */
+    System.out.println("TeamRank - Provide the names of team members to begin...");
+    while (true) {
+    	String name = c.readLine("Enter a name - or (d)one:");
+    	if (name == null || name.trim().equals("")) {
+    	  continue;
+    	}
+    	name = name.trim();
+    	if (name.equals("d") && teamMembers.size() > 0) {
+    	  break;
+    	} else {
+    		if (teamMembers.contains(name)) {
+    		  System.out.println(name+" already present - duplicates not allowed");
+    		  continue;
+    		}
+    		teamMembers.add(name);
+    	}
+    }
+	  
+	Map<String,ArrayList<String>> voteMap = new HashMap<String,ArrayList<String>>();
     String voter = null;
     while (true) {
       voter = c.readLine("Enter voter name - or (d)one: ");
@@ -34,6 +57,9 @@ public class PageRank {
       voter = voter.trim();
       if (voter.equals("d")) {
         break;
+      }
+      if (!validTeamMember(voter)) {
+    	  continue;
       }
       ArrayList<String> votes = voteMap.get(voter);
       if (votes == null) {
@@ -49,6 +75,9 @@ public class PageRank {
         vote = vote.trim();
         if (vote.equals("d")) {
           break;
+        }
+        if (!validTeamMember(vote)) {
+      	  continue;
         }
         votes.add(vote);
       }
@@ -354,4 +383,16 @@ public class PageRank {
     }
   }
 
+  private boolean validTeamMember(String name) {
+    if (name == null) {
+    	return false;
+    }
+    name = name.trim();
+	if (teamMembers.contains(name)) {
+		return true;
+	}
+	System.out.println("Unknown team member: "+name);
+	return false;
+  }
+  
 }
