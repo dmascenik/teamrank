@@ -105,4 +105,4 @@ it will be gamed - but congrats on the tight-knit team!
 - cd teamrank
 - mvn clean install
 - cd target/classes
-- java PageRank
+- java TeamRank

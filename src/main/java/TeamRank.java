@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class PageRank {
+public class TeamRank {
 
   private static final float BREAKOUT_PROBABILITY = 0.85f;
   private static boolean debug = false;
@@ -17,7 +17,7 @@ public class PageRank {
       System.err.println("No console");
       System.exit(1);
     }
-    new PageRank().start(c);
+    new TeamRank().start(c);
   }
 
   /**
@@ -55,7 +55,7 @@ public class PageRank {
     }
 
     System.out.println();
-    System.out.println("Computing PageRank...");
+    System.out.println("Computing TeamRank...");
     System.out.println();
 
     Map<String,Float> pageRank = pageRank(voteMap);
