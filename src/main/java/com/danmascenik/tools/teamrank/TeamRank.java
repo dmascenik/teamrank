@@ -1,3 +1,4 @@
+package com.danmascenik.tools.teamrank;
 import java.io.Console;
 import java.util.ArrayList;
 import java.util.HashMap;

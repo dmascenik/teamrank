@@ -1,5 +1,8 @@
+package com.danmascenik.tools.teamrank;
 
 import org.junit.Test;
+
+import com.danmascenik.tools.teamrank.TeamRank;
 
 public class TeamRankTest {
 
