@@ -45,8 +45,8 @@ links from, say, this page.
 contribution, that team member is ranked higher. If *that* team member thinks another team
 member makes a positive contribution, his or her vote carries more weight. Because the algorithm
 used was designed to rank *all the pages on the Internet*, given sufficient computing power,
-it could work for a team larger than all of humanity by several multiples (though I haven't
-personally verified this). It yields the expected result for teams as small as 2, though.
+it could work for a team larger than all of humanity by several multiples (though this implementation
+definitely wouldn't). It yields the expected result for teams as small as 2, though.
 
 #How to Use#
 
