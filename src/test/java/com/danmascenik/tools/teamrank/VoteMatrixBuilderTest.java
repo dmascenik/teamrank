@@ -31,7 +31,10 @@ public class VoteMatrixBuilderTest {
     assertEquals(1, voters.size());
     assertTrue(voters.contains("a"));
     assertEquals(1.0f, v.valueAt("a", "b"), 0);
-    assertEquals(0.0f, v.valueAt("b", "a"), 0);
+
+    /* Because the built matrix has been made stochastic and "b" didn't vote for anyone, his votes have been
+     * evenly divided over the other 3 team members. */
+    assertEquals(0.33f, v.valueAt("b", "a"), 0.01f);
   }
 
   @Test(expected = IllegalArgumentException.class)

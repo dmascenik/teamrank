@@ -6,9 +6,31 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * A square v containing the raw data for a team rank calculation. This class is immutable, so any v
- * transformations return a new instance. New instances must be constructed using the inner {@link Builder}
- * class.
+ * A square matrix containing the raw data for a team rank calculation, encapsulating all the details of
+ * transforming the matrix such that the power method will yield a stationary vector. New instances must be
+ * constructed using the inner {@link Builder} class. <br/>
+ * <br/>
+ * Key assumptions to ensure convergence to a stationary vector:<br>
+ * <br/>
+ * <ol>
+ * <li><b>The matrix must be stochastic</b>: This means that all the entries are non-negative and the sum of
+ * the entries in each column is 1. Since a team member can only vote for another team member once, every
+ * entry in the matrix is either zero or one. Simply dividing each entry by the number of non-zero entries in
+ * the column ensures that the column adds up to one.<br/>
+ * <br/>
+ * But what if a column is all zeros? This happens when a team member didn't vote for anyone. <i>To make the
+ * matrix stochastic, we will assume that voting for no one is the same as voting for everyone.</i><br/>
+ * <br/>
+ * </li>
+ * <li><b>The matrix must be irreducible</b>: In order to guarantee that the power method will converge to a
+ * single stationary vector regardless of the starting vector, there can't be any sub-groups whose votes only
+ * come from their fellow members. However, cliques are inevitable even on modestly sized teams. Everyone
+ * can't possibly know everything about everyone else. To make the matrix irreducible, we will assume that
+ * <i>if a team member randomly selects another team member and gets to know them, there is some probability
+ * that they will discover some positive influence, regardless of how they voted.</i> The probability that
+ * positive influence will come from an unexpected source injects a probability factor to make the matrix
+ * irreducible.</li>
+ * </ol>
  *
  * @author Dan Mascenik
  * @param <T> The type used for voters'/votees' unique identifier (e.g. their name as a String, or a mapped
@@ -19,8 +41,6 @@ public class VoteMatrix<T> {
   private float[][] v;
   private float[][] a;
   private boolean hasVotes = false;
-  private boolean isStochastic = false;
-  private boolean isIrreducible = false;
 
   /**
    * Correlates voters'/votees' unique identifiers to indices on the axes of the square v.
@@ -33,36 +53,18 @@ public class VoteMatrix<T> {
   private Map<Integer,T> revIndex = new HashMap<Integer,T>();
 
   private VoteMatrix(Set<T> ids) {
-    this(ids.size());
+    int size = ids.size();
+    if (size == 0) {
+      throw new IllegalArgumentException(VoteMatrix.class.getName() + " requires at least one voter");
+    }
+    v = new float[size][size];
+    a = new float[size][size];
     int idx = 0;
     for (T id : ids) {
       indexMap.put(id, idx);
       revIndex.put(idx, id);
       idx++;
     }
-  }
-
-  private VoteMatrix(VoteMatrix<T> orig) {
-    this(orig.indexMap.size());
-    this.indexMap = orig.indexMap;
-    this.revIndex = orig.revIndex;
-    this.hasVotes = orig.hasVotes;
-    this.isStochastic = orig.isStochastic;
-    this.isIrreducible = orig.isIrreducible;
-    for (int from = 0; from < orig.v.length; from++) {
-      System.arraycopy(orig.v[from], 0, v[from], 0, orig.v.length);
-    }
-    for (int from = 0; from < orig.a.length; from++) {
-      System.arraycopy(orig.a[from], 0, a[from], 0, orig.a.length);
-    }
-  }
-
-  private VoteMatrix(int size) {
-    if (size == 0) {
-      throw new IllegalArgumentException(VoteMatrix.class.getName() + " requires at least one voter");
-    }
-    v = new float[size][size];
-    a = new float[size][size];
   }
 
   private void putVote(T from, T to) {
@@ -88,42 +90,24 @@ public class VoteMatrix<T> {
    * means that if someone doesn't vote for anyone, it's the same as if they voted for everyone. This does not
    * affect the results of {@link #getVoters(Object)} or {@link #getVotes(Object)}
    */
-  public VoteMatrix<T> makeStochastic() {
-    VoteMatrix<T> out = new VoteMatrix<T>(this);
-    for (int from = 0; from < this.v.length; from++) {
+  private void makeStochastic() {
+    for (int from = 0; from < v.length; from++) {
       int count = 0;
-      for (int to = 0; to < this.v.length; to++) {
-        if (this.v[from][to] > 0.0f) {
+      for (int to = 0; to < v.length; to++) {
+        if (v[from][to] > 0.0f) {
           count++;
         }
       }
-      for (int to = 0; to < this.v.length; to++) {
+      for (int to = 0; to < v.length; to++) {
         if (count == 0.0f) {
           if (from != to) {
-            out.a[from][to] = (float)(1.0f / (this.v.length - 1));
+            a[from][to] = (float)(1.0f / (v.length - 1));
           }
         } else {
-          out.v[from][to] = (float)(this.v[from][to] / count);
+          v[from][to] = (float)(v[from][to] / count);
         }
       }
     }
-    out.isStochastic = true;
-    return out;
-  }
-
-  /**
-   * Votes may be cyclic, making the matrix reducible, thus not having a stationary vector. Since finding a
-   * stationary vector (the dominant eigenvector) of the matrix is how we plan to get a rank, this is a
-   * problem. This problem is overcome by introducing some probability that people will not strictly stick to
-   * their votes. How do we get away with this? Even on a small team, everyone won't know everything about
-   * everyone else. There is a chance that given the opportunity to learn more about any individual, they will
-   * discover something that they find positive, whether they voted for that person or not. Larry Page and
-   * Sergey Brin chose 15% for PageRank, and that may be a reasonable start here, too.
-   *
-   * @param breakoutProbability
-   */
-  public VoteMatrix<T> makeIrreducible(float breakoutProbability) {
-    return null;
   }
 
   /**
@@ -172,21 +156,16 @@ public class VoteMatrix<T> {
     return v[f][t] + a[f][t];
   }
 
-  public boolean isStochastic() {
-    return this.isStochastic;
-  }
-
-  public boolean isIrreducible() {
-    return this.isIrreducible;
-  }
-
   /**
    * Constructs a {@link VoteMatrix} and inserts votes into it. Votes are idempotent; i.e., if one person
    * votes for another multiple times, it still only counts once.
    */
   public static class Builder<TT> {
 
+    public static final float BREAKOUT_PROBABILITY = 0.15f;
+
     private VoteMatrix<TT> voteMatrix;
+    private float breakoutProbability = BREAKOUT_PROBABILITY;
     private boolean isBuilt = false;
 
     /**
@@ -211,6 +190,21 @@ public class VoteMatrix<T> {
     }
 
     /**
+     * Votes may be cyclic, making the matrix reducible, thus not having a stationary vector. Since finding a
+     * stationary vector (the dominant eigenvector) of the matrix is how we plan to get a rank, this is a
+     * problem. This problem is overcome by introducing some probability that people will not strictly stick
+     * to their votes. How do we get away with this? Even on a small team, everyone won't know everything
+     * about everyone else. There is a chance that given the opportunity to learn more about any individual,
+     * they will discover something that they find positive, whether they voted for that person or not. Larry
+     * Page and Sergey Brin chose 15% for PageRank, so that is the default.
+     *
+     * @param breakoutProbability
+     */
+    public void setBreakoutProbability(float breakoutProbability) {
+      this.breakoutProbability = breakoutProbability;
+    }
+
+    /**
      * Returns the completed {@link VoteMatrix} and prevents any further modifications.
      */
     public synchronized VoteMatrix<TT> build() {
@@ -221,6 +215,8 @@ public class VoteMatrix<T> {
       }
       VoteMatrix<TT> m = voteMatrix;
       voteMatrix = null;
+
+      m.makeStochastic();
       return m;
     }
 
