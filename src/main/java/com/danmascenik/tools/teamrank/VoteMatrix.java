@@ -38,9 +38,12 @@ import java.util.Set;
  */
 public class VoteMatrix<T> {
 
+  public static final float BREAKOUT_PROBABILITY = 0.15f;
+
   private float[][] v;
   private float[][] a;
   private boolean hasVotes = false;
+  private float breakoutProbability = BREAKOUT_PROBABILITY;
 
   /**
    * Correlates voters'/votees' unique identifiers to indices on the axes of the square v.
@@ -111,6 +114,25 @@ public class VoteMatrix<T> {
   }
 
   /**
+   * Votes may be cyclic, making the matrix reducible, thus not having a stationary vector. Since finding a
+   * stationary vector (the dominant eigenvector) of the matrix is how we plan to get a rank, this is a
+   * problem. This problem is overcome by introducing some probability that people will not strictly stick to
+   * their votes. How do we get away with this? Even on a small team, everyone won't know everything about
+   * everyone else. There is a chance that given the opportunity to learn more about any individual, they will
+   * discover something that they find positive, whether they voted for that person or not. Larry Page and
+   * Sergey Brin chose 15% for PageRank, so that is the default.
+   *
+   * @param breakoutProbability
+   */
+  public void setBreakoutProbability(float breakoutProbability) {
+    this.breakoutProbability = breakoutProbability;
+  }
+
+  public float[] dominantEigenvector() {
+    return null;
+  }
+
+  /**
    * Returns the identifiers of all the votes cast by the provided voter.
    *
    * @param id
@@ -162,10 +184,7 @@ public class VoteMatrix<T> {
    */
   public static class Builder<TT> {
 
-    public static final float BREAKOUT_PROBABILITY = 0.15f;
-
     private VoteMatrix<TT> voteMatrix;
-    private float breakoutProbability = BREAKOUT_PROBABILITY;
     private boolean isBuilt = false;
 
     /**
@@ -180,6 +199,10 @@ public class VoteMatrix<T> {
       voteMatrix.putVote(from, to);
     }
 
+    public void validate(TT id) {
+      voteMatrix.getVoterIndex(id);
+    }
+
     /**
      * Convenience method for {@link #castVote(Object, Object)} that loops over multiple votes
      */
@@ -187,21 +210,6 @@ public class VoteMatrix<T> {
       for (TT t : to) {
         castVote(from, t);
       }
-    }
-
-    /**
-     * Votes may be cyclic, making the matrix reducible, thus not having a stationary vector. Since finding a
-     * stationary vector (the dominant eigenvector) of the matrix is how we plan to get a rank, this is a
-     * problem. This problem is overcome by introducing some probability that people will not strictly stick
-     * to their votes. How do we get away with this? Even on a small team, everyone won't know everything
-     * about everyone else. There is a chance that given the opportunity to learn more about any individual,
-     * they will discover something that they find positive, whether they voted for that person or not. Larry
-     * Page and Sergey Brin chose 15% for PageRank, so that is the default.
-     *
-     * @param breakoutProbability
-     */
-    public void setBreakoutProbability(float breakoutProbability) {
-      this.breakoutProbability = breakoutProbability;
     }
 
     /**

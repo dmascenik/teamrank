@@ -1,4 +1,5 @@
 package com.danmascenik.tools.teamrank;
+
 import java.io.Console;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,10 +8,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.danmascenik.tools.teamrank.VoteMatrix.Builder;
+
 public class TeamRank {
 
   private static final float BREAKOUT_PROBABILITY = 0.85f;
-  private static boolean debug = false;
 
   public static void main(String[] args) {
     Console c = System.console();
@@ -25,7 +27,23 @@ public class TeamRank {
    * Gather the necessary data from the console.
    */
   public void start(Console c) {
-    Map<String,ArrayList<String>> voteMap = new HashMap<String,ArrayList<String>>();
+    Set<String> teamMembers = new HashSet<String>();
+    String teamMember = null;
+    while (true) {
+      teamMember = c.readLine("Enter a unique team member name - or (d)one: ");
+      if (teamMember == null || teamMember.trim().equals("")) {
+        continue;
+      }
+      teamMember = teamMember.trim();
+      if (teamMember.equals("d")) {
+        break;
+      } else if (teamMembers.contains(teamMember)) {
+        System.out.println(teamMember + " already added");
+        continue;
+      }
+      teamMembers.add(teamMember);
+    }
+    Builder<String> b = new Builder<String>(teamMembers);
     String voter = null;
     while (true) {
       voter = c.readLine("Enter voter name - or (d)one: ");
@@ -33,13 +51,14 @@ public class TeamRank {
         continue;
       }
       voter = voter.trim();
+      try {
+        b.validate(voter);
+      } catch (Exception e) {
+        System.out.println("Unknown team member: " + voter);
+        continue;
+      }
       if (voter.equals("d")) {
         break;
-      }
-      ArrayList<String> votes = voteMap.get(voter);
-      if (votes == null) {
-        votes = new ArrayList<String>();
-        voteMap.put(voter, votes);
       }
       String vote = null;
       while (true) {
@@ -48,18 +67,25 @@ public class TeamRank {
           continue;
         }
         vote = vote.trim();
+        try {
+          b.validate(vote);
+        } catch (Exception e) {
+          System.out.println("Unknown team member: " + voter);
+          continue;
+        }
         if (vote.equals("d")) {
           break;
         }
-        votes.add(vote);
+        b.castVote(voter, vote);
       }
     }
+    VoteMatrix<String> voteMatrix = b.build();
 
     System.out.println();
     System.out.println("Computing TeamRank...");
     System.out.println();
 
-    Map<String,Float> pageRank = pageRank(voteMap);
+    Map<String,Float> pageRank = pageRank(voteMatrix);
 
     for (String name : pageRank.keySet()) {
       Float rank = pageRank.get(name);
@@ -70,33 +96,9 @@ public class TeamRank {
   /**
    * Compute the ranking
    */
-  private Map<String,Float> pageRank(Map<String,ArrayList<String>> voteMap) {
-    String[] voters = extractVoters(voteMap);
-    Map<String,Integer> voterRevIndex = indexVoters(voters);
-    float[][] h = toSquareMatrix(voters, voterRevIndex, voteMap);
-
-    if (debug) {
-      for (int i = 0; i < voters.length; i++) {
-        System.out.println(i + " = " + voters[i]);
-      }
-      printMatrix(h);
-    }
-
-    float[][] s = makeStochastic(h);
-
-    if (debug) {
-      System.out.println();
-      printMatrix(s);
-    }
-
-    s = makeIrreducible(s);
-
-    if (debug) {
-      System.out.println();
-      printMatrix(s);
-    }
-
-    float[] i = dominantEigenvector(s);
+  private Map<String,Float> pageRank(VoteMatrix<String> voteMatrix) {
+    String[] voters = null;
+    float[] i = voteMatrix.dominantEigenvector();
 
     // Convert the raw ranking into percentages
     float total = 0.0f;
@@ -126,7 +128,6 @@ public class TeamRank {
    * @return
    */
   public static float[] dominantEigenvector(float[][] s) {
-    validateSquareMatrix(s);
     int iterations = 0;
 
     // Initial vector of all ones
@@ -142,18 +143,6 @@ public class TeamRank {
       }
       iout = multiply(s, iin);
       iout = normalize(iout);
-
-      if (debug) {
-        StringBuffer sb = new StringBuffer("[");
-        for (int i = 0; i < iout.length; i++) {
-          sb.append(iout[i]);
-          if (i != iout.length - 1) {
-            sb.append(", ");
-          }
-        }
-        sb.append("]");
-        System.out.println(sb.toString());
-      }
 
       iterations++;
     }
@@ -206,7 +195,6 @@ public class TeamRank {
    * @return
    */
   public static float[] multiply(float[][] m, float[] v) {
-    validateSquareMatrix(m);
     if (m.length != v.length) {
       throw new IllegalArgumentException("vector is not the same length as the square matrix");
     }
@@ -291,7 +279,6 @@ public class TeamRank {
    * @return
    */
   public static float[][] makeStochastic(float[][] in) {
-    validateSquareMatrix(in);
     float[][] out = new float[in.length][in.length];
 
     for (int x = 0; x < in.length; x++) {
@@ -327,7 +314,6 @@ public class TeamRank {
    * @return
    */
   public static float[][] makeIrreducible(float[][] in) {
-    validateSquareMatrix(in);
     float[][] out = new float[in.length][in.length];
     for (int x = 0; x < in.length; x++) {
       for (int y = 0; y < in.length; y++) {
@@ -335,24 +321,6 @@ public class TeamRank {
       }
     }
     return out;
-  }
-
-  public static void printMatrix(float[][] matrix) {
-    StringBuffer sb = new StringBuffer();
-    sb.append("\n\r");
-    for (int y = 0; y < matrix.length; y++) {
-      for (int x = 0; x < matrix.length; x++) {
-        sb.append(matrix[x][y] + "  ");
-      }
-      sb.append("\n\r");
-    }
-    System.out.println(sb.toString());
-  }
-
-  private static void validateSquareMatrix(float[][] matrix) {
-    if (matrix.length != matrix[0].length) {
-      throw new IllegalArgumentException("matrix must be square");
-    }
   }
 
 }
