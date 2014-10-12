@@ -39,11 +39,14 @@ import java.util.Set;
 public class VoteMatrix<T> {
 
   public static final float BREAKOUT_PROBABILITY = 0.15f;
+  public static final int MAX_ITERATIONS = 1000;
+  public static final float CONVERGENCE_MAX_DELTA = 0.0001f;
 
   private float[][] v;
   private float[][] a;
   private boolean hasVotes = false;
   private float bProb = BREAKOUT_PROBABILITY;
+  private int iterationCount = -1;
 
   /**
    * Correlates voters'/votees' unique identifiers to indices on the axes of the square v.
@@ -125,6 +128,10 @@ public class VoteMatrix<T> {
    * @param bProb
    */
   public void setBreakoutProbability(float breakoutProbability) {
+    if (!(breakoutProbability > 0f) || breakoutProbability > 1f) {
+      throw new IllegalArgumentException(
+          "Breakout probability must be greater than zero and less than or equal to one");
+    }
     this.bProb = breakoutProbability;
   }
 
@@ -142,7 +149,7 @@ public class VoteMatrix<T> {
       }
     }
 
-    int iterations = 0;
+    iterationCount = 0;
 
     // Initial vector of all ones
     float[] iin = new float[g.length];
@@ -154,17 +161,24 @@ public class VoteMatrix<T> {
     /* Here's the power method in action. The stochastic, irreducible matrix is multiplied by the initial
      * vector of all 1's, resulting in another vector. The matrix is then multiplied by that vector. This
      * process continues until the result has converged on a stationary vector (the dominant eigenvector). */
-    while (iterations < 1000 && !converged(iin, iout)) {
-      if (iterations != 0) {
+    while (iterationCount < MAX_ITERATIONS && !converged(iin, iout)) {
+      if (iterationCount != 0) {
         iin = iout;
       }
       iout = multiply(g, iin);
       iout = normalize(iout);
-
-      iterations++;
+      iterationCount++;
     }
-    System.out.println("Converged after " + iterations + " iterations");
     return iout;
+  }
+
+  /**
+   * Returns the number of iterations it took for the power method to converge the last time
+   * {@link #getDominantEigenvector()} was called. If {@link #getDominantEigenvector()} has not yet been
+   * called, this will return -1.
+   */
+  public int getIterationCount() {
+    return this.iterationCount;
   }
 
   /**
@@ -213,6 +227,14 @@ public class VoteMatrix<T> {
     return v[f][t] + a[f][t];
   }
 
+  public T getVoterForIndex(int idx) {
+    T voter = revIndex.get(idx);
+    if (voter == null) {
+      throw new IllegalArgumentException("Invalid index: " + idx);
+    }
+    return voter;
+  }
+
   /**
    * Returns true if none of the array elements differ by more than 0.0001
    *
@@ -227,7 +249,7 @@ public class VoteMatrix<T> {
     for (int i = 0; i < in.length; i++) {
       float diff = in[i] - out[i];
       diff = Math.abs(diff);
-      if (diff > 0.0001) {
+      if (diff > CONVERGENCE_MAX_DELTA) {
         return false;
       }
     }

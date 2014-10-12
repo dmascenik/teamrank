@@ -10,8 +10,6 @@ import com.danmascenik.tools.teamrank.VoteMatrix.Builder;
 
 public class TeamRank {
 
-  private static final float BREAKOUT_PROBABILITY = 0.85f;
-
   public static void main(String[] args) {
     Console c = System.console();
     if (c == null) {
