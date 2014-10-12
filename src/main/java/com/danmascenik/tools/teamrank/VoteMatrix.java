@@ -43,7 +43,7 @@ public class VoteMatrix<T> {
   private float[][] v;
   private float[][] a;
   private boolean hasVotes = false;
-  private float breakoutProbability = BREAKOUT_PROBABILITY;
+  private float bProb = BREAKOUT_PROBABILITY;
 
   /**
    * Correlates voters'/votees' unique identifiers to indices on the axes of the square v.
@@ -122,14 +122,49 @@ public class VoteMatrix<T> {
    * discover something that they find positive, whether they voted for that person or not. Larry Page and
    * Sergey Brin chose 15% for PageRank, so that is the default.
    *
-   * @param breakoutProbability
+   * @param bProb
    */
   public void setBreakoutProbability(float breakoutProbability) {
-    this.breakoutProbability = breakoutProbability;
+    this.bProb = breakoutProbability;
   }
 
-  public float[] dominantEigenvector() {
-    return null;
+  public float getBreakoutProbability() {
+    return this.bProb;
+  }
+
+  public float[] getDominantEigenvector() {
+    /* Calculate the stochastic, irreducible matrix by adding v to a and introducing the probability factor to
+     * the result. */
+    float[][] g = new float[v.length][v.length];
+    for (int from = 0; from < v.length; from++) {
+      for (int to = 0; to < v.length; to++) {
+        g[from][to] = (v[from][to] + a[from][to]) * (1 - bProb) + bProb / v.length;
+      }
+    }
+
+    int iterations = 0;
+
+    // Initial vector of all ones
+    float[] iin = new float[g.length];
+    for (int i = 0; i < g.length; i++) {
+      iin[i] = 1;
+    }
+    float[] iout = new float[g.length];
+
+    /* Here's the power method in action. The stochastic, irreducible matrix is multiplied by the initial
+     * vector of all 1's, resulting in another vector. The matrix is then multiplied by that vector. This
+     * process continues until the result has converged on a stationary vector (the dominant eigenvector). */
+    while (iterations < 1000 && !converged(iin, iout)) {
+      if (iterations != 0) {
+        iin = iout;
+      }
+      iout = multiply(g, iin);
+      iout = normalize(iout);
+
+      iterations++;
+    }
+    System.out.println("Converged after " + iterations + " iterations");
+    return iout;
   }
 
   /**
@@ -176,6 +211,63 @@ public class VoteMatrix<T> {
     int f = getVoterIndex(from);
     int t = getVoterIndex(to);
     return v[f][t] + a[f][t];
+  }
+
+  /**
+   * Returns true if none of the array elements differ by more than 0.0001
+   *
+   * @param in
+   * @param out
+   * @return
+   */
+  protected static boolean converged(float[] in, float[] out) {
+    if (in.length != out.length) {
+      throw new IllegalArgumentException("input arrays must be of the same length");
+    }
+    for (int i = 0; i < in.length; i++) {
+      float diff = in[i] - out[i];
+      diff = Math.abs(diff);
+      if (diff > 0.0001) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /**
+   * Normalizes a vector by dividing each element by the value of the nth element, making the last element
+   * equal to one.
+   *
+   * @param v
+   * @return
+   */
+  protected static float[] normalize(float[] v) {
+    for (int i = 0; i < v.length; i++) {
+      v[i] = v[i] / v[v.length - 1];
+    }
+    return v;
+  }
+
+  /**
+   * Multiplies the matrix m by the vector v
+   *
+   * @param m
+   * @param v
+   * @return
+   */
+  protected static float[] multiply(float[][] m, float[] v) {
+    if (m.length != v.length) {
+      throw new IllegalArgumentException("vector is not the same length as the square matrix");
+    }
+    float[] out = new float[v.length];
+    for (int y = 0; y < m.length; y++) {
+      float temp = 0;
+      for (int x = 0; x < m.length; x++) {
+        temp += v[x] * m[x][y];
+      }
+      out[y] = temp;
+    }
+    return out;
   }
 
   /**
