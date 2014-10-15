@@ -44,14 +44,22 @@
           <aggregate>true</aggregate>
           <quiet>true</quiet>
           <check>
-            <branchRate>0</branchRate> <!-- 0+ impossible with private constructors -->
-            <lineRate>0</lineRate> <!-- 0+ impossible with private constructors -->
-            <haltOnFailure>true</haltOnFailure>
+            <branchRate>${reqd.test.coverage}</branchRate>
+            <lineRate>${reqd.test.coverage}</lineRate>
             <totalBranchRate>${reqd.test.coverage}</totalBranchRate>
             <totalLineRate>${reqd.test.coverage}</totalLineRate>
             <packageLineRate>${reqd.test.coverage}</packageLineRate>
             <packageBranchRate>${reqd.test.coverage}</packageBranchRate>
+            <haltOnFailure>true</haltOnFailure>
           </check>
+          <instrumentation>
+            <ignores>
+              <ignore>com.danmascenik.tools.teamrank.TeamRank.class</ignore> <!-- contains the main method -->
+            </ignores>
+            <excludes>
+              <exclude>com/danmascenik/tools/teamrank/TeamRank.class</exclude> <!-- contains the main method -->
+            </excludes>
+          </instrumentation>
         </configuration>
         <executions>
           <execution>
