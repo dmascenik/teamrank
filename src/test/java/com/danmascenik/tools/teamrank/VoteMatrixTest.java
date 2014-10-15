@@ -2,7 +2,11 @@ package com.danmascenik.tools.teamrank;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
@@ -106,6 +110,29 @@ public class VoteMatrixTest {
   }
 
   @Test
+  public void testGetSortedResults() {
+    List<Rank<String>> results = m.getResults();
+    assertNotNull(results);
+    assertEquals(5, results.size());
+    assertEquals("b", results.get(0).getId()); // b should be winner
+    assertEquals("e", results.get(4).getId()); // e should be last
+  }
+
+  @Test
+  public void testGetSortedResultsAsPercentages() {
+    List<Rank<String>> results = m.getResults(true);
+    assertNotNull(results);
+    assertEquals(5, results.size());
+    assertEquals("b", results.get(0).getId()); // b should be winner
+    assertEquals("e", results.get(4).getId()); // e should be last
+    float total = 0f;
+    for (Rank<String> rank : results) {
+      total += rank.getScore();
+    }
+    assertEquals(1.0f, total, 0.000001f);
+  }
+
+  @Test
   public void testGetDominantEigenvectorHundredPercentBreakout() {
     m.setBreakoutProbability(1.0f); // turns the randomness up to 100%, votes have no effect at all
     float[] i = m.getDominantEigenvector();
@@ -113,6 +140,85 @@ public class VoteMatrixTest {
       assertEquals(1f, i[x], 0f); // all values should be 1
     }
     assertEquals(1, m.getIterationCount()); // initial vector will be the final vector
+  }
+
+  @Test
+  public void testConverged() {
+    float[] a = new float[] {1.0f, 1.1f, 1.2f, 1.3f};
+    float[] b = new float[] {1.01f, 1.11f, 1.21f, 1.31f};
+    assertFalse(VoteMatrix.converged(a, b));
+    b = new float[] {1.0f, 1.1f, 1.2f, (1.3f + VoteMatrix.CONVERGENCE_MAX_DELTA)};
+    assertFalse(VoteMatrix.converged(a, b)); // off by the max delta
+    b = new float[] {1.0f, 1.1f, 1.2f, (1.3f + VoteMatrix.CONVERGENCE_MAX_DELTA / 2f)};
+    assertTrue(VoteMatrix.converged(a, b)); // off by half the max delta
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testConvergedDifferentLengthVectors() {
+    float[] a = new float[] {1.0f, 1.1f, 1.2f, 1.3f};
+    float[] b = new float[] {1.01f, 1.11f, 1.21f};
+    VoteMatrix.converged(a, b);
+  }
+
+  @Test
+  public void testConvergedNullInput() {
+    float[] a = new float[] {1.0f, 1.1f, 1.2f, 1.3f};
+    float[] b = new float[] {1.01f, 1.11f, 1.21f, 1.31f};
+    try {
+      VoteMatrix.converged(a, null);
+      fail("Should have thrown an NPE");
+    } catch (NullPointerException e) {}
+    try {
+      VoteMatrix.converged(null, b);
+      fail("Should have thrown an NPE");
+    } catch (NullPointerException e) {}
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testMultiplyMismatchedSize() {
+    float[][] m = new float[][] { {1f, 2f}, {2f, 1f}};
+    float[] v = new float[] {1f, 2f, 3f};
+    VoteMatrix.multiply(m, v);
+  }
+
+  @Test
+  public void testMultipleNullInput() {
+    float[][] m = new float[][] { {1f, 2f}, {2f, 1f}};
+    float[] v = new float[] {1f, 2f, 3f};
+    try {
+      VoteMatrix.multiply(m, null);
+      fail("Should have thrown an NPE");
+    } catch (NullPointerException e) {}
+    try {
+      VoteMatrix.multiply(null, v);
+      fail("Should have thrown an NPE");
+    } catch (NullPointerException e) {}
+  }
+
+  @Test
+  public void testNormalize() {
+    float[] in = new float[] {4f, 6f, 2f};
+    float[] out = VoteMatrix.normalize(in);
+    assertEquals(2f, out[0], 0f);
+    assertEquals(3f, out[1], 0f);
+    assertEquals(1f, out[2], 0f);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testNormalizeEmptyVector() {
+    float[] in = new float[] {};
+    VoteMatrix.normalize(in);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testNormalizeZeroVector() {
+    float[] in = new float[] {1f, 0f};
+    VoteMatrix.normalize(in);
+  }
+
+  @Test(expected = NullPointerException.class)
+  public void testNormalizeNullVector() {
+    VoteMatrix.normalize(null);
   }
 
   @Before

@@ -1,9 +1,8 @@
 package com.danmascenik.tools.teamrank;
 
 import java.io.Console;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
+import java.util.List;
 import java.util.Set;
 
 import com.danmascenik.tools.teamrank.VoteMatrix.Builder;
@@ -16,13 +15,13 @@ public class TeamRank {
       System.err.println("No console");
       System.exit(1);
     }
-    new TeamRank().start(c);
+    new TeamRank().runFromConsole(c);
   }
 
   /**
    * Gather the necessary data from the console.
    */
-  public void start(Console c) {
+  public void runFromConsole(Console c) {
     Set<String> teamMembers = new HashSet<String>();
     String teamMember = null;
     while (true) {
@@ -47,14 +46,14 @@ public class TeamRank {
         continue;
       }
       voter = voter.trim();
+      if (voter.equals("d")) {
+        break;
+      }
       try {
         b.validate(voter);
       } catch (Exception e) {
         System.out.println("Unknown team member: " + voter);
         continue;
-      }
-      if (voter.equals("d")) {
-        break;
       }
       String vote = null;
       while (true) {
@@ -63,14 +62,14 @@ public class TeamRank {
           continue;
         }
         vote = vote.trim();
+        if (vote.equals("d")) {
+          break;
+        }
         try {
           b.validate(vote);
         } catch (Exception e) {
           System.out.println("Unknown team member: " + voter);
           continue;
-        }
-        if (vote.equals("d")) {
-          break;
         }
         b.castVote(voter, vote);
       }
@@ -79,39 +78,13 @@ public class TeamRank {
 
     System.out.println();
     System.out.println("Computing TeamRank...");
+
+    List<Rank<String>> teamRank = voteMatrix.getResults(true);
+    System.out.println("...converged after " + voteMatrix.getIterationCount() + " iterations.");
     System.out.println();
 
-    Map<String,Float> pageRank = pageRank(voteMatrix);
-
-    for (String name : pageRank.keySet()) {
-      Float rank = pageRank.get(name);
-      System.out.println(name + ": " + rank);
+    for (Rank<String> rank : teamRank) {
+      System.out.printf("%-10s %4.1f%%\n", rank.getId() + ":", (rank.getScore() * 100f));
     }
   }
-
-  /**
-   * Compute the ranking
-   */
-  private Map<String,Float> pageRank(VoteMatrix<String> voteMatrix) {
-    String[] voters = null;
-    float[] i = voteMatrix.getDominantEigenvector();
-
-    // Convert the raw ranking into percentages
-    float total = 0.0f;
-    for (int idx = 0; idx < i.length; idx++) {
-      total += i[idx];
-    }
-    for (int idx = 0; idx < i.length; idx++) {
-      i[idx] = i[idx] / total;
-    }
-
-    Map<String,Float> results = new HashMap<String,Float>();
-    for (int idx = 0; idx < i.length; idx++) {
-      results.put(voters[idx], i[idx]);
-    }
-
-    return results;
-  }
-
-
 }

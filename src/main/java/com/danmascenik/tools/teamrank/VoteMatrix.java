@@ -1,9 +1,14 @@
 package com.danmascenik.tools.teamrank;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import com.danmascenik.tools.teamrank.Rank.RankComparator;
 
 /**
  * A square matrix containing the raw data for a team rank calculation, encapsulating all the details of
@@ -173,6 +178,37 @@ public class VoteMatrix<T> {
   }
 
   /**
+   * Returns the ranking results as a sorted list of {@link Rank}s, with the highest first.
+   *
+   * @param usePercentages true will return the scores as percentages (adding up to 100%), otherwise raw
+   * scores will be returned.
+   */
+  public List<Rank<T>> getResults(boolean usePercentages) {
+    float[] i = getDominantEigenvector();
+    float total = 0f;
+    if (usePercentages) {
+      for (float score : i) {
+        total += score;
+      }
+    }
+    List<Rank<T>> results = new ArrayList<Rank<T>>();
+    for (int x = 0; x < i.length; x++) {
+      float score = usePercentages ? i[x] / total : i[x];
+      Rank<T> rank = new Rank<T>(getVoterForIndex(x), score);
+      results.add(rank);
+    }
+    Collections.sort(results, new RankComparator());
+    return results;
+  }
+
+  /**
+   * Convenience method for {@link #getResults(boolean)} with usePercentages set to false.
+   */
+  public List<Rank<T>> getResults() {
+    return getResults(false);
+  }
+
+  /**
    * Returns the number of iterations it took for the power method to converge the last time
    * {@link #getDominantEigenvector()} was called. If {@link #getDominantEigenvector()} has not yet been
    * called, this will return -1.
@@ -264,6 +300,10 @@ public class VoteMatrix<T> {
    * @return
    */
   protected static float[] normalize(float[] v) {
+    if (v.length == 0 || v[v.length - 1] == 0) {
+      throw new IllegalArgumentException(
+          "Vector to normalize must have a non-zero length and a non-zero last element");
+    }
     for (int i = 0; i < v.length; i++) {
       v[i] = v[i] / v[v.length - 1];
     }
