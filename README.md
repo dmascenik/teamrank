@@ -5,6 +5,22 @@ TeamRank
 
 by **Dan Mascenik**
 
+###Quick Guide for the Impatient
+*Requires Java SDK 1.7+ and Maven 3+*
+- git clone https://github.com/dmascenik/teamrank.git
+- cd teamrank
+- mvn clean install
+- cd target/classes
+- java com/danmascenik/tools/teamrank/TeamRank
+
+You will be asked to enter all the team member's names. Enter all of them, whether or not they
+cast or receive any votes. You will then be asked to select one of those team members and enter
+their votes. You can select the same team member multiple times to append additional votes, but
+votes cannot be retracted, and any to/from vote combination is only counted once. Self-votes are
+ignored.
+
+#About TeamRank#
+
 At some time or another, every manager has to rank his or her team. It's a dangerous task, both to 
 the culture of the team as well as the manager's credibility. Because of these risks, managers
 tend to avoid ranking employees, but unfortunately, there are times when ranks are essential:
