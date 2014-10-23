@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import com.danmascenik.tools.teamrank.Rank.RankComparator;
@@ -64,6 +65,7 @@ public class VoteMatrix<T> {
   private Map<Integer,T> revIndex = new HashMap<Integer,T>();
 
   private VoteMatrix(Set<T> ids) {
+    Objects.requireNonNull(ids);
     int size = ids.size();
     if (size == 0) {
       throw new IllegalArgumentException(VoteMatrix.class.getName() + " requires at least one voter");
@@ -345,6 +347,7 @@ public class VoteMatrix<T> {
      * @param ids A set of unique identifiers for the team members
      */
     public Builder(Set<TT> ids) {
+      Objects.requireNonNull(ids);
       voteMatrix = new VoteMatrix<TT>(ids);
     }
 
