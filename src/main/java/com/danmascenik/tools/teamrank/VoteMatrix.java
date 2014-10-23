@@ -1,6 +1,7 @@
 package com.danmascenik.tools.teamrank;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -113,9 +114,8 @@ public class VoteMatrix<T> {
       }
       for (int to = 0; to < v.length; to++) {
         if (count == 0.0f) {
-          if (from != to) {
-            a[from][to] = (float)(1.0f / (v.length - 1));
-          }
+          Arrays.fill(a[from], (float)(1.0f / (v.length - 1)));
+          a[from][from] = 0;
         } else {
           v[from][to] = (float)(v[from][to] / count);
         }
