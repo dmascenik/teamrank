@@ -1,21 +1,20 @@
 package com.danmascenik.tools.teamrank;
 
 import java.util.Comparator;
+import java.util.Objects;
 
 /**
- * Contains a team member's identifier and their score.
+ * Immutable class that contains a team member's identifier and their score.
  *
  * @author danmascenik
  */
 public class Rank<T> {
 
-  private T id;
-  private float score;
+  private final T id;
+  private final float score;
 
   public Rank(T id, float score) {
-    if (id == null) {
-      throw new IllegalArgumentException("id cannot be null");
-    }
+    Objects.requireNonNull(id, "id cannot be null");
     this.id = id;
     this.score = score;
   }
