@@ -26,10 +26,10 @@ public class TeamRank {
     String teamMember = null;
     while (true) {
       teamMember = c.readLine("Enter a unique team member name - or (d)one: ");
-      if (teamMember == null || teamMember.trim().equals("")) {
+      teamMember = teamMember.trim();
+      if (teamMember.equals("")) {
         continue;
       }
-      teamMember = teamMember.trim();
       if (teamMember.equals("d")) {
         break;
       } else if (teamMembers.contains(teamMember)) {
@@ -42,10 +42,10 @@ public class TeamRank {
     String voter = null;
     while (true) {
       voter = c.readLine("Enter voter name - or (d)one: ");
-      if (voter == null || voter.trim().equals("")) {
+      voter = voter.trim();
+      if (voter.equals("")) {
         continue;
       }
-      voter = voter.trim();
       if (voter.equals("d")) {
         break;
       }
@@ -58,10 +58,10 @@ public class TeamRank {
       String vote = null;
       while (true) {
         vote = c.readLine("Cast vote - or (d)one: ");
-        if (vote == null || vote.trim().equals("") || vote.trim().equals(voter)) {
+        vote = vote.trim();
+        if (vote.equals("") || vote.equals(voter)) {
           continue;
         }
-        vote = vote.trim();
         if (vote.equals("d")) {
           break;
         }
