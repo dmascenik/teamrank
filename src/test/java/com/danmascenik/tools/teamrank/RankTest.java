@@ -19,7 +19,7 @@ public class RankTest {
     assertEquals(1f, rank.getScore(), 0f);
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test(expected = NullPointerException.class)
   public void testConstructorWithNullId() {
     new Rank<String>(null, 1f);
   }
