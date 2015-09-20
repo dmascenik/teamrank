@@ -7,4 +7,5 @@ build/
 .*~
 .settings/
 .gradle/
+node_modules/
 .DS_Store

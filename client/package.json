@@ -4,9 +4,12 @@
   "description": "Web Client for TeamRank",
   "main": "index.jsx",
   "scripts": {
-    "test": "test"
+    "compile": "babel src --out-dir build/js",
+    "test": "npm run compile && COVERAGE=true jenkins-mocha test/*.js*",
+    "devtest": "npm run compile && jenkins-mocha --no-coverage test/*.js*",
+    "start": "npm run compile && nodemon server.js"
   },
-  "repository": {
+"repository": {
     "type": "git",
     "url": "https://github.com/dmascenik/teamrank.git"
   },
@@ -17,7 +20,24 @@
     "node"
   ],
   "author": "Dan Mascenik",
-  "license": "Creative Commons",
+  "license": "CC0 1.0 Universal",
+  "devDependencies": {
+    "babel": "^5.8.23",
+    "babel-core": "^5.8.23",
+    "babel-loader": "^5.3.2",
+    "express": "^4.13.3",
+    "istanbul": "^0.3.19",
+    "jenkins-mocha": "^2.2.0",
+    "jsx-test": "^0.7.6",
+    "nodemon": "^1.4.1",
+    "react-hot-loader": "^1.3.0",
+    "webpack": "^1.12.0",
+    "webpack-dev-server": "^1.10.1"
+  },
+  "dependencies": {
+    "radium": "^0.13.8",
+    "react": "^0.13.3"
+  },
   "bugs": {
     "url": "https://github.com/dmascenik/teamrank/issues"
   },
