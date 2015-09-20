@@ -1,6 +1,10 @@
 .classpath
 .project
+*.sublime-*
 target/
+build/
 *~
+.*~
 .settings/
+.gradle/
 .DS_Store
