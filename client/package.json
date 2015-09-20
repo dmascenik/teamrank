@@ -1,0 +1,25 @@
+{
+  "name": "teamrank-client",
+  "version": "1.0.0",
+  "description": "Web Client for TeamRank",
+  "main": "index.jsx",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dmascenik/teamrank.git"
+  },
+  "keywords": [
+    "pagerank",
+    "reactjs",
+    "gradle",
+    "node"
+  ],
+  "author": "Dan Mascenik",
+  "license": "Creative Commons",
+  "bugs": {
+    "url": "https://github.com/dmascenik/teamrank/issues"
+  },
+  "homepage": "https://github.com/dmascenik/teamrank"
+}

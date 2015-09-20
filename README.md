@@ -11,7 +11,7 @@ by **Dan Mascenik**
 - git clone https://github.com/dmascenik/teamrank.git
 - cd teamrank
 - gradle clean build coberturaCheck
-- java -jar build/libs/teamrank.jar
+- java -jar core/build/libs/teamrank.jar
 
 You will be asked to enter all the team member's names. Enter all of them, whether or not they
 cast or receive any votes. You will then be asked to select one of those team members and enter
@@ -120,4 +120,4 @@ it will be gamed - but congrats on the tight-knit team!
 - git clone https://github.com/dmascenik/teamrank.git
 - cd teamrank
 - gradle clean build coberturaCheck
-- java -jar build/libs/teamrank.jar
+- java -jar core/build/libs/teamrank.jar
