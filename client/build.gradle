@@ -11,4 +11,14 @@ task compile(type: NpmTask) {
     args = ['run', 'compile']
 
 }
+
+task test(type: NpmTask) {
+    args = ['run', 'test']
+
+}
+
+task check() {}
+
+check.dependsOn test
+test.dependsOn npmInstall
 compile.dependsOn npmInstall

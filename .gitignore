@@ -5,6 +5,7 @@ target/
 build/
 *~
 .*~
+artifacts/
 .settings/
 .gradle/
 node_modules/

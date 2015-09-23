@@ -5,6 +5,7 @@ apply plugin: 'java'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
+
 def minCoverage = 80
 
 repositories {
@@ -14,15 +15,12 @@ repositories {
 dependencies {
     testCompile 'junit:junit:4.8.1'
     testCompile 'com.google.guava:guava:18.0'
-
     testRuntime "org.slf4j:slf4j-log4j12:1.7.5"
 	testRuntime 'org.slf4j:slf4j-nop:1.7.12' // for cobertura
 }
 
 cobertura {
     coverageFormats = ['html', 'xml']
-    coverageIgnoreTrivial = true
-    coverageExcludes = ['.*com.danmascenik.tools.teamrank.TeamRank'] // main method and CLI
     coverageReportDir = new File("$buildDir/reports/cobertura")	
     coverageCheckTotalBranchRate = minCoverage
     coverageCheckTotalLineRate = minCoverage
@@ -31,6 +29,8 @@ cobertura {
     coverageCheckBranchRate = minCoverage
     coverageCheckLineRate = minCoverage
     coverageCheckHaltOnFailure = true
+    coverageIgnoreTrivial = true
+    coverageExcludes = ['.*com.danmascenik.tools.teamrank.TeamRank'] // main method and CLI
 }
 
 jar {
@@ -40,3 +40,4 @@ jar {
     }
 }
 
+check.dependsOn coberturaCheck
