@@ -1,0 +1,14 @@
+apply plugin: 'war'
+apply plugin: 'jetty'
+
+configurations {
+  staticAssets
+}
+
+dependencies {
+  staticAssets project(path: ':client', configuration: 'dist')
+}
+
+war {
+  from configurations.staticAssets
+}

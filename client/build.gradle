@@ -29,3 +29,15 @@ task build(type: NpmTask) {
 	args = ['run', 'package']
 }
 build.dependsOn coverage
+
+configurations {
+  dist
+}
+
+FileTree tree = fileTree(dir: 'src/static')
+
+artifacts {
+  dist file: file('build/dist/app.js'), builtBy: build
+  dist file: file('src/static/index.html')
+  dist file: file('src/static/style.css')
+}

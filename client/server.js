@@ -2,17 +2,17 @@ var express = require('express');
 var app = express();
 var webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');
-var config = require('./webpack.config');
+var config = require('./webpack-dev.config');
 
 app.get('/app.js', function (req, res) {
   res.redirect('//localhost:9090/build/app.js');
 });
 
 app.get('/', function (req, res) {
-  res.sendFile(__dirname + '/test/live/index.html');
+  res.sendFile(__dirname + '/src/static/index.html');
 });
 
-app.use(express.static(__dirname + '/test/live'));
+app.use(express.static(__dirname + '/src/static'));
 
 new WebpackDevServer(webpack(config), {
     publicPath: config.output.publicPath,
