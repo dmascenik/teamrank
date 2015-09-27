@@ -11,14 +11,21 @@ task compile(type: NpmTask) {
     args = ['run', 'compile']
 
 }
+compile.dependsOn npmInstall
 
 task test(type: NpmTask) {
     args = ['run', 'test']
 
 }
+test.dependsOn compile
 
-task check() {}
+task coverage(type: NpmTask) {
+    args = ['run', 'coverage']
 
-check.dependsOn test
-test.dependsOn npmInstall
-compile.dependsOn npmInstall
+}
+coverage.dependsOn compile
+
+task build(type: NpmTask) {
+	args = ['run', 'package']
+}
+build.dependsOn coverage

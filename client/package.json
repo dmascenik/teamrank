@@ -5,20 +5,16 @@
   "main": "index.jsx",
   "scripts": {
     "compile": "babel src --out-dir build/js",
-    "test": "npm run compile && COVERAGE=true jenkins-mocha test/*.js*",
-    "devtest": "npm run compile && jenkins-mocha --no-coverage test/*.js*",
+    "coverage": "COVERAGE=true ARTIFACTS_DIR=./build/reports jenkins-mocha test/*.js*",
+    "test": "ARTIFACTS_DIR=./build/reports jenkins-mocha --no-coverage test/*.js*",
+    "package": "webpack",
     "start": "npm run compile && nodemon server.js"
   },
-"repository": {
+  "repository": {
     "type": "git",
     "url": "https://github.com/dmascenik/teamrank.git"
   },
-  "keywords": [
-    "pagerank",
-    "reactjs",
-    "gradle",
-    "node"
-  ],
+  "keywords": [],
   "author": "Dan Mascenik",
   "license": "CC0 1.0 Universal",
   "devDependencies": {
