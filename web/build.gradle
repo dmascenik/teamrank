@@ -2,13 +2,16 @@ apply plugin: 'war'
 apply plugin: 'jetty'
 
 configurations {
-  staticAssets
+  webRootAssets
 }
 
 dependencies {
-  staticAssets project(path: ':client', configuration: 'dist')
+  webRootAssets project(path: ':client', configuration: 'dist')
 }
 
 war {
-  from configurations.staticAssets
+  dependsOn configurations.webRootAssets
+  from { 
+    configurations.webRootAssets.collect { zipTree(it) }
+  }
 }

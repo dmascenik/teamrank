@@ -2,6 +2,8 @@ plugins {
   id "com.moowork.node" version "0.10"
 }
 
+def distFileName = 'app.zip'
+
 task clean(type: Delete) {
   description 'Deletes the build directory'
   delete 'build'
@@ -30,14 +32,20 @@ task build(type: NpmTask) {
 }
 build.dependsOn coverage
 
+/**
+ * Final artifacts (JS, HTML, CSS, assets, etc) are zipped into a single artifact
+ */
+task zipDist(dependsOn: 'build', type: Zip) {
+  from 'build/dist'
+  from 'src/static'
+  archiveName = distFileName
+  destinationDir = file('build')
+}
+
 configurations {
   dist
 }
 
-FileTree tree = fileTree(dir: 'src/static')
-
 artifacts {
-  dist file: file('build/dist/app.js'), builtBy: build
-  dist file: file('src/static/index.html')
-  dist file: file('src/static/style.css')
+  dist zipDist
 }
