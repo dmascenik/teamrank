@@ -1,4 +1,4 @@
-package com.danmascenik.tools.teamrank;
+package com.danmascenik.teamrank.core;
 
 import static org.junit.Assert.assertEquals;
 
@@ -7,7 +7,8 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.danmascenik.tools.teamrank.Rank.RankComparator;
+import com.danmascenik.teamrank.core.Rank;
+import com.danmascenik.teamrank.core.Rank.RankComparator;
 import com.google.common.collect.Lists;
 
 public class RankTest {

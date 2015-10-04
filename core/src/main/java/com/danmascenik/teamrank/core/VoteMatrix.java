@@ -1,4 +1,4 @@
-package com.danmascenik.tools.teamrank;
+package com.danmascenik.teamrank.core;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import com.danmascenik.tools.teamrank.Rank.RankComparator;
+import com.danmascenik.teamrank.core.Rank.RankComparator;
 
 /**
  * A square matrix containing the raw data for a team rank calculation, encapsulating all the details of

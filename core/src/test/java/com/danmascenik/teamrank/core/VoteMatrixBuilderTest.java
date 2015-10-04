@@ -1,4 +1,4 @@
-package com.danmascenik.tools.teamrank;
+package com.danmascenik.teamrank.core;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -10,7 +10,8 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import com.danmascenik.tools.teamrank.VoteMatrix.Builder;
+import com.danmascenik.teamrank.core.VoteMatrix;
+import com.danmascenik.teamrank.core.VoteMatrix.Builder;
 import com.google.common.collect.Sets;
 
 public class VoteMatrixBuilderTest {

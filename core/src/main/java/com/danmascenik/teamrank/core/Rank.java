@@ -1,4 +1,4 @@
-package com.danmascenik.tools.teamrank;
+package com.danmascenik.teamrank.core;
 
 import java.util.Comparator;
 import java.util.Objects;

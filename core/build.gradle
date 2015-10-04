@@ -30,13 +30,13 @@ cobertura {
     coverageCheckLineRate = minCoverage
     coverageCheckHaltOnFailure = true
     coverageIgnoreTrivial = true
-    coverageExcludes = ['.*com.danmascenik.tools.teamrank.TeamRank'] // main method and CLI
+    coverageExcludes = ['.*com.danmascenik.teamrank.core.TeamRank'] // main method and CLI
 }
 
 jar {
     archiveName = 'teamrank.jar'
     manifest {
-        attributes 'Main-Class': 'com.danmascenik.tools.teamrank.TeamRank'
+        attributes 'Main-Class': 'com.danmascenik.teamrank.core.TeamRank'
     }
 }
 

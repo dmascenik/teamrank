@@ -1,11 +1,11 @@
-package com.danmascenik.tools.teamrank;
+package com.danmascenik.teamrank.core;
 
 import java.io.Console;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.danmascenik.tools.teamrank.VoteMatrix.Builder;
+import com.danmascenik.teamrank.core.VoteMatrix.Builder;
 
 public class TeamRank {
 
