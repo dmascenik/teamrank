@@ -1,6 +1,19 @@
 var React = require("react");
 var Radium = require("radium");
 
+
+// HACK HACK HACK
+var Client = require("node-rest-client").Client;
+var client = new Client();
+client.get("http://localhost:8080/web/r/about", function(data, response){
+  // parsed response body as js object 
+  console.log(data);
+  // raw response 
+  console.log(response);
+});
+
+
+
 var style = {
   base: {
     width: "50px", // default width if none set
