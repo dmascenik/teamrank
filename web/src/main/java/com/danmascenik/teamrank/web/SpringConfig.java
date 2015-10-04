@@ -1,4 +1,4 @@
-package com.danmascenik.teamrank;
+package com.danmascenik.teamrank.web;
 
 import org.springframework.context.annotation.Configuration;
 

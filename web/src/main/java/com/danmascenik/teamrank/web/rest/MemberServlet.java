@@ -1,4 +1,4 @@
-package com.danmascenik.teamrank.rest;
+package com.danmascenik.teamrank.web.rest;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -10,7 +10,7 @@ import javax.ws.rs.core.MediaType;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.springframework.stereotype.Component;
 
-import com.danmascenik.teamrank.rest.api.MemberJSON;
+import com.danmascenik.teamrank.web.rest.api.MemberJSON;
 
 @Component
 @Path("/member")

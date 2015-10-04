@@ -1,4 +1,4 @@
-package com.danmascenik.teamrank.rest.api;
+package com.danmascenik.teamrank.web.rest.api;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;

@@ -13,7 +13,7 @@
   </context-param>
   <context-param>
     <param-name>contextConfigLocation</param-name>
-    <param-value>com.danmascenik.teamrank.SpringConfig</param-value>
+    <param-value>com.danmascenik.teamrank.web.SpringConfig</param-value>
   </context-param>
 
   <servlet>
@@ -22,7 +22,7 @@
     <async-supported>true</async-supported>
     <init-param>
       <param-name>jersey.config.server.provider.packages</param-name>
-      <param-value>com.danmascenik.teamrank.rest</param-value>
+      <param-value>com.danmascenik.teamrank.web.rest</param-value>
     </init-param>
     <init-param>
       <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>

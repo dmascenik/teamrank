@@ -1,4 +1,4 @@
-package com.danmascenik.teamrank.rest;
+package com.danmascenik.teamrank.web.rest;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -7,7 +7,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.springframework.stereotype.Component;
 
-import com.danmascenik.teamrank.rest.api.AboutJSON;
+import com.danmascenik.teamrank.web.rest.api.AboutJSON;
 
 @Component
 @Path("/about")

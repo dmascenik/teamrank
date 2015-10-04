@@ -1,4 +1,4 @@
-package com.danmascenik.teamrank.rest.api;
+package com.danmascenik.teamrank.web.rest.api;
 
 public class ExceptionJSON {
 
