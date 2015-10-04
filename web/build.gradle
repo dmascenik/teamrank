@@ -1,16 +1,39 @@
 apply plugin: 'war'
 apply plugin: 'jetty'
 
+repositories {
+  mavenLocal()
+  mavenCentral()
+}
+
 configurations {
   webRootAssets
+  provided
 }
 
 dependencies {
+  compile group: "org.springframework", name: "spring-web", version: "4.1.6.RELEASE"
+  compile group: "org.slf4j", name: "slf4j-api", version: "1.7.10"
+  compile group: "org.slf4j", name: "slf4j-log4j12", version: "1.7.10"
+  compile group: "org.glassfish.jersey.containers", name: "jersey-container-servlet", version: "2.4.1"
+  compile group: "org.glassfish.jersey.media", name: "jersey-media-json-jackson", version: "2.4.1"
+  compile group: "org.glassfish.jersey.media", name: "jersey-media-multipart", version: "2.4.1"
+  compile group: "com.fasterxml.jackson.jaxrs", name: "jackson-jaxrs-json-provider", version: "2.5.3"
+  compile group: "org.glassfish.jersey.ext", name: "jersey-spring3", version: "2.4.1"
+  provided group: "javax.servlet", name: "javax.servlet-api", version: "3.1.0"
+
   webRootAssets project(path: ':client', configuration: 'dist')
+}
+
+sourceSets {
+    main.compileClasspath += configurations.provided
+    test.compileClasspath += configurations.provided
+    test.runtimeClasspath += configurations.provided
 }
 
 war {
   dependsOn configurations.webRootAssets
+  webXml = file('src/main/webapp/web.xml')
   from { 
     configurations.webRootAssets.collect { zipTree(it) }
   }
