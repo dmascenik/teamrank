@@ -1,5 +1,6 @@
 var React = require("react");
 var Radium = require("radium");
+var about = require("./Service/About");
 
 var style = {
 	base: {
@@ -13,8 +14,13 @@ class FillerText extends React.Component {
 	}
 
 	render() {
+		var version = about.version();
+
 		return <div style={[style.base, this.props.style]}>
 		  <span>
+		  <br/>
+		  Version: {version}
+		  <br/><br/>
 			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque sit amet orci ullamcorper 
 			nunc consectetur eleifend. Sed dictum non tortor vel sagittis. Mauris venenatis congue nunc. 
 			Integer ac tellus vitae urna mattis iaculis vehicula vel risus. Pellentesque non faucibus velit, 

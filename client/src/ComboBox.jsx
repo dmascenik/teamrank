@@ -1,18 +1,5 @@
 var React = require("react");
 var Radium = require("radium");
-var URL = require("url");
-
-// HACK HACK HACK
-var Client = require("node-rest-client").Client;
-var client = new Client();
-client.get(URL.resolve(window.location.href, "r/about"), function(data, response){
-  // parsed response body as js object 
-  console.log("Data: " + JSON.stringify(data));
-  // raw response 
-  console.log("Response: " + JSON.stringify(response));
-});
-
-
 
 var style = {
   base: {
