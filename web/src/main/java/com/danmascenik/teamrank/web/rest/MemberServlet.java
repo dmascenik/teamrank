@@ -67,7 +67,7 @@ public class MemberServlet {
   @GET
   @Path("{voterId}/vote/{targetId}")
   @Produces(MediaType.APPLICATION_JSON)
-  public MemberJSON getMember(@PathParam("voterId") String voterId, @PathParam("targetId") String targetId)
+  public MemberJSON castVote(@PathParam("voterId") String voterId, @PathParam("targetId") String targetId)
       throws Exception {
 
     throw new RuntimeException("not implemented");
