@@ -1,5 +1,14 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher');
-var MemberConstants = require('../constants/MemberConstants');
+var MemberConstants = require('../constants').MemberConstants;
+
+function dispatchNewMemberPending() {
+  AppDispatcher.handleViewAction({
+    actionType: MemberConstants.MEMBER_CREATE_PENDING
+  });
+}
+
+
+
 
 var MemberActions = {
 
@@ -8,9 +17,6 @@ var MemberActions = {
    * @param  {email} email
    */
   create: function(name, email) {
-    AppDispatcher.handleViewAction({
-      actionType: MemberConstants.MEMBER_CREATE_PENDING
-    });
 
     new Promise(function(resolve,reject) {
       // client.get(url, function(data, response) {
@@ -22,21 +28,21 @@ var MemberActions = {
     }).then( 
       function(data) {
         AppDispatcher.handleViewAction({
-          actionType: TodoConstants.MEMBER_CREATE_SUCCESS
+          actionType: MemberConstants.MEMBER_CREATE_SUCCESS
           // more stuff...
         });
       }
     ).catch(
       function() {
         AppDispatcher.handleViewAction({
-          actionType: TodoConstants.MEMBER_CREATE_FAILED
+          actionType: MemberConstants.MEMBER_CREATE_FAILED
           // more stuff...
         });
       }
     );
 
     AppDispatcher.handleViewAction({
-      actionType: TodoConstants.MEMBER_CREATE_DONE
+      actionType: MemberConstants.MEMBER_CREATE_DONE
     });
   },
 

@@ -16,9 +16,6 @@ var endpointKeys = mirror(endpoints);
 
 module.exports = {
 
-  endpoints: endpoints,
-  endpointKeys: endpointKeys,
-
   /**
    * Provides the full URL of the service endpoint including URL template
    * placeholders.

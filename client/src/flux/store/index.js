@@ -1,3 +1,4 @@
 module.exports = {
-  MemberStore: require('./MemberStore')
+  MemberStore: require('./MemberStore'),
+  AboutStore:  require('./AboutStore')
 }

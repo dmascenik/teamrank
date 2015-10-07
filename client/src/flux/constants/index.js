@@ -1,3 +1,4 @@
 module.exports = {
-  MemberConstants: require('./MemberConstants')
+  MemberConstants: require('./MemberConstants'),
+  AboutConstants:  require('./AboutConstants')
 }

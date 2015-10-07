@@ -1,14 +1,25 @@
 var Client = require("node-rest-client").Client;
-var URL = require("url");
+var api = require('./TeamRankAPI');
 
 var client = new Client();
 
 module.exports = {
 
-  getVersion: function() {
-    client.get(URL.resolve(window.location.href, "r/about"), function(data, response) {
-      console.log("Data:" + JSON.stringify(data));
-    });
+  getVersion: function(callFirst, onSuccess, onFailure) {
+    callFirst();
+    var promise = new Promise(function(resolve,reject) {
+      client.get(api.urlOf('version'), function(data, response) {
+        if (response.statusCode === 200) {
+          resolve(data.version);
+        } else {
+          reject();
+        }
+      });
+    }).then(
+      function(version) { onSuccess(version); }
+    ).catch(
+      function() { onFailure(); }
+    );
   }
 
 }

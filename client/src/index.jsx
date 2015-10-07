@@ -1,7 +1,11 @@
 var React = require("react");
 
-import FillerText from './FillerText.jsx';
-import ComboBox from './ComboBox.jsx';
+import TeamRankApp from './flux/component/TeamRankApp.jsx';
 
-React.render(<ComboBox width="200px" />,            document.getElementById("content"));
-React.render(<FillerText style={{width: "50%"}}/>,	document.getElementById("filler"));
+React.render(<TeamRankApp style={{width: "50%"}}/> , document.getElementById("app"));
+
+//import FillerText from './FillerText.jsx';
+//import ComboBox from './ComboBox.jsx';
+
+//React.render(<ComboBox width="200px" />,            document.getElementById("content"));
+//React.render(<FillerText style={{width: "50%"}}/>,	document.getElementById("filler"));

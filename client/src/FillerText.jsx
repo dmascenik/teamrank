@@ -1,5 +1,6 @@
 var React = require("react");
 var Radium = require("radium");
+var About = require('./flux/action').AboutActions;
 
 var style = {
 	base: {
@@ -10,11 +11,45 @@ var style = {
 class FillerText extends React.Component {
 	constructor(props) {
 		super(props);
+		this.state = {
+			version: "unknown",
+			status: ""
+		}
 	}
 
+  componentDidMount() {
+    AboutStore.addChangeListener(this._onChange);
+  }
+
+  componentWillUnmount() {
+    AboutStore.removeChangeListener(this._onChange);
+  }
+
+  _onChange() {
+  	
+  }
+
 	render() {
+		let versionStyle = {
+			fontWeight: "bold"
+		};
+		if (this.state.status === "pending") {
+			versionStyle = {
+				fontWeight: "normal",
+				textDecoration: "italic"
+			};
+		} else if (this.state.status === "success") {
+			versionStyle = {};
+		} else if (this.state.status === "failed") {
+			versionStyle = {
+				fontWeight: "bold",
+				color: "red"
+			};
+		}
+
 		return <div style={[style.base, this.props.style]}>
 		  <span>
+		  Version: <span style={versionStyle}>{this.state.version}</span>
 			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque sit amet orci ullamcorper 
 			nunc consectetur eleifend. Sed dictum non tortor vel sagittis. Mauris venenatis congue nunc. 
 			Integer ac tellus vitae urna mattis iaculis vehicula vel risus. Pellentesque non faucibus velit, 
