@@ -13,7 +13,8 @@ class TeamRankApp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      version: "unknown"
+      version: "unknown",
+      status: ""
     }
     this.onChange = this.onChange.bind(this)
   }
@@ -30,14 +31,28 @@ class TeamRankApp extends React.Component {
   onChange() {
     console.log("Change event received: version="+AboutStore.getVersion());
     this.setState({
-      version: AboutStore.getVersion()
+      version: AboutStore.getVersion(),
+      status: AboutStore.getStatus()
     });
   }
 
   render() {
+    let versionStyle = {};
+    if (this.state.status == "pending") {
+      versionStyle = {
+        textDecoration: "italic",
+        color: "#aaaaaa"
+      };
+    } else if (this.state.status == "failed") {
+      versionStyle = {
+        fontWeight: "bold",
+        color: "red"
+      };
+    }
+
     return <div style={[style.base, this.props.style]}>
       <span>
-      Version: {this.state.version}
+      Version: <span style={versionStyle}>{this.state.version}</span>
       <br/><br/>
       Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque sit amet orci ullamcorper 
       nunc consectetur eleifend. Sed dictum non tortor vel sagittis. Mauris venenatis congue nunc. 

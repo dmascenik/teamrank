@@ -6,11 +6,16 @@ var AboutConstants = require('../constants').AboutConstants;
 var CHANGE_EVENT = 'aboutChange';
 
 var version;
+var status;
 
 var AboutStore = assign({}, EventEmitter.prototype, {
 
   getVersion: function() {
     return version;
+  },
+
+  getStatus: function() {
+    return status;
   },
 
   emitChange: function() {
@@ -37,16 +42,19 @@ var AboutStore = assign({}, EventEmitter.prototype, {
     switch(action.actionType) {
       case AboutConstants.ABOUT_PENDING:
         version = "checking...";
+        status = "pending";
         AboutStore.emitChange();
         break;
 
       case AboutConstants.ABOUT_SUCCESS:
         version = action.version;
+        status = "success";
         AboutStore.emitChange();
         break;
 
       case AboutConstants.ABOUT_FAILED:
         version = "FAILED";
+        status = "failed";
         AboutStore.emitChange();
         break;
 

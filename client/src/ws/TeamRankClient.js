@@ -1,6 +1,5 @@
 var Client = require("node-rest-client").Client;
 var api = require('./TeamRankAPI');
-
 var client = new Client();
 
 module.exports = {
@@ -22,4 +21,14 @@ module.exports = {
     );
   }
 
+}
+
+function doCall() {
+  new Promise(function(resolve,reject) {
+
+  }).then(
+
+  ).catch(
+
+  );
 }
