@@ -20,7 +20,7 @@ class TeamRankApp extends React.Component {
 
   componentDidMount() {
     Config.addChangeListener(this.onChange);
-    ConfigAction.getConfig();
+    ConfigAction.loadConfig();
   }
 
   componentWillUnmount() {

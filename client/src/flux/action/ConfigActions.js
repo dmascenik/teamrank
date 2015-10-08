@@ -1,15 +1,11 @@
 var dispatcher = require('../dispatcher');
 var constants = require('../constants').ConfigConstants;
-var client = require('../../ws');
+var ws = require('../../ws');
 
 var ConfigActions = {
 
-  getConfig: function() {
-    client.getConfig(
-        dispatchConfigPending,
-        dispatchConfigSuccess,
-        dispatchConfigFailed
-      );
+  loadConfig: function() {
+    ws.getConfig(pending, onSuccess, onFailed);
   }
 
 };
@@ -19,20 +15,20 @@ module.exports = ConfigActions;
  * Some "private" functions, separated for clarity above and to avoid repetition
  */
 
-function dispatchConfigPending() {
+function pending() {
   dispatcher.handleViewAction({
     actionType: constants.CONFIG_PENDING
   });
 }
 
-function dispatchConfigSuccess(config) {
+function onSuccess(config) {
   dispatcher.handleViewAction({
     actionType: constants.CONFIG_SUCCESS,
     config: config
   });
 }
 
-function dispatchConfigFailed() {
+function onFailed() {
   dispatcher.handleViewAction({
     actionType: constants.CONFIG_FAILED
   });

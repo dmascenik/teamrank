@@ -1,1 +1,1 @@
-module.exports = require('./TeamRankClient');
+module.exports = require('./TeamRankService');

@@ -38,4 +38,3 @@ war {
     configurations.webRootAssets.collect { zipTree(it) }
   }
 }
-
