@@ -4,18 +4,18 @@ var client = new Client();
 
 module.exports = {
 
-  getVersion: function(callFirst, onSuccess, onFailure) {
+  getConfig: function(callFirst, onSuccess, onFailure) {
     callFirst();
     var promise = new Promise(function(resolve,reject) {
-      client.get(api.urlOf('version'), function(data, response) {
+      client.get(api.urlOf('config'), function(data, response) {
         if (response.statusCode === 200) {
-          resolve(data.version);
+          resolve(data);
         } else {
           reject();
         }
       });
     }).then(
-      function(version) { onSuccess(version); }
+      function(config) { onSuccess(config); }
     ).catch(
       function() { onFailure(); }
     );

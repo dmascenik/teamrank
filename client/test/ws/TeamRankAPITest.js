@@ -13,13 +13,13 @@ describe('TeamRankAPI', function() {
   var mockSystem;
 
   it('uses the system-provided base URL', function () {
-    var url = TeamRankAPI.urlOf("version");
+    var url = TeamRankAPI.urlOf("config");
     assert(url.indexOf("fake_host")); // hostname from the mock
   });
 
   it('gets URL for valid key', function () {
-    var url = TeamRankAPI.urlOf("version");
-    assert(url.indexOf("about"));
+    var url = TeamRankAPI.urlOf("config");
+    assert(url.indexOf("config"));
   });
 
   /**

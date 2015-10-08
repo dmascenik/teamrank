@@ -1,7 +1,7 @@
 var React = require("react");
 var Radium = require("radium");
-var AboutStore = require('../store').AboutStore;
-var AboutAction = require('../action').AboutActions;
+var Config = require('../store').ConfigStore;
+var ConfigAction = require('../action').ConfigActions;
 
 var style = {
   base: {
@@ -13,46 +13,34 @@ class TeamRankApp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      version: "unknown",
-      status: ""
+      version: "unknown"
     }
     this.onChange = this.onChange.bind(this)
   }
 
   componentDidMount() {
-    AboutStore.addChangeListener(this.onChange);
-    AboutAction.getVersion();
+    Config.addChangeListener(this.onChange);
+    ConfigAction.getConfig();
   }
 
   componentWillUnmount() {
-    AboutStore.removeChangeListener(this.onChange);
+    Config.removeChangeListener(this.onChange);
   }
 
   onChange() {
-    console.log("Change event received: version="+AboutStore.getVersion());
-    this.setState({
-      version: AboutStore.getVersion(),
-      status: AboutStore.getStatus()
-    });
+    console.log("Called with config loaded="+Config.isConfigLoaded()+" and config="+JSON.stringify(Config.getConfig()));
+
+    if (Config.isConfigLoaded()) {
+      this.setState({
+        version: Config.getConfig().version
+      });
+    }
   }
 
   render() {
-    let versionStyle = {};
-    if (this.state.status == "pending") {
-      versionStyle = {
-        textDecoration: "italic",
-        color: "#aaaaaa"
-      };
-    } else if (this.state.status == "failed") {
-      versionStyle = {
-        fontWeight: "bold",
-        color: "red"
-      };
-    }
-
     return <div style={[style.base, this.props.style]}>
       <span>
-      Version: <span style={versionStyle}>{this.state.version}</span>
+      Version: {this.state.version}
       <br/><br/>
       Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque sit amet orci ullamcorper 
       nunc consectetur eleifend. Sed dictum non tortor vel sagittis. Mauris venenatis congue nunc. 

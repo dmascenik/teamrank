@@ -2,8 +2,8 @@ var keymirror = require('keymirror');
 
 module.exports = keymirror({
 
-  ABOUT_PENDING: null,
-  ABOUT_SUCCESS: null,
-  ABOUT_FAILED: null
+  CONFIG_PENDING: null,
+  CONFIG_SUCCESS: null,
+  CONFIG_FAILED: null
   
 });

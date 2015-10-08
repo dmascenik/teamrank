@@ -1,4 +1,4 @@
 module.exports = {
-  AboutActions:  require('./AboutActions'),
-  MemberActions: require('./MemberActions')
+  MemberActions: require('./MemberActions'),
+  ConfigActions: require('./ConfigActions')
 }

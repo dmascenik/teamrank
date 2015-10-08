@@ -7,7 +7,7 @@ var system = require('../system');
  * all kept in one place for easy maintenance.
  */
 var endpoints = {
-  version:     "r/about",
+  config:      "r/config",
   member:      "r/member/{id}",
   memberEmail: "r/member/email",
   memberVote:  "r/member/{from}/vote/{to}"

@@ -1,14 +1,14 @@
 package com.danmascenik.teamrank.web.rest.api;
 
-public class AboutJSON {
+public class ConfigJSON {
 
-  private String version;
+  private String version = "1.0";
 
-  public AboutJSON() {
+  public ConfigJSON() {
 
   }
 
-  public AboutJSON(String version) {
+  public ConfigJSON(String version) {
     this.version = version;
   }
 

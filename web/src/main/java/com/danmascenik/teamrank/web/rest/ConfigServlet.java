@@ -7,17 +7,17 @@ import javax.ws.rs.core.MediaType;
 
 import org.springframework.stereotype.Component;
 
-import com.danmascenik.teamrank.web.rest.api.AboutJSON;
+import com.danmascenik.teamrank.web.rest.api.ConfigJSON;
 
 @Component
-@Path("/about")
-public class AboutServlet {
+@Path("/config")
+public class ConfigServlet {
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  public AboutJSON getAboutInfo() throws Exception {
+  public ConfigJSON getConfig() throws Exception {
 
-    return new AboutJSON("1.0");
+    return new ConfigJSON();
   }
 
 
