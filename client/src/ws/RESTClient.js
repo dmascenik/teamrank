@@ -22,8 +22,11 @@ module.exports = {
    * @param method The HTTP method - e.g. GET, POST, etc.
    */
   registerMethod: function(name, url, method) {
-    if (!validMethod[method]) {
+    if (!validMethods[method]) {
       throw "Invalid HTTP method ("+method+") when registering web service endpoint";
+    }
+    if (client.methods[name]) {
+      throw "Cannot register duplicate web service endpoint name: "+name;
     }
     client.registerMethod(name, url, method);
   },
@@ -41,6 +44,10 @@ module.exports = {
       throw "Web service method is not registered: "+name;
     }
     client.methods[name](args,onResponse); 
+  },
+
+  unregisterAll: function() {
+    client.methods = {};
   }
 
 }
