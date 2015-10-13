@@ -1,3 +1,47 @@
 {
-  "version": "1.0-mock"
+  "version": "1.0-mock",
+
+  "resources": 
+  {
+
+    "member":
+    {
+      "CREATE": {
+        "method": "POST",
+        "URI": "r/member"
+      },
+      "GET": {
+        "method": "GET",
+        "URI": "r/member/{id}"
+      },
+      "UPDATE": {
+        "method": "POST",
+        "URI": "r/member/{id}"
+      },
+      "DELETE": {
+        "method": "DELETE",
+        "URI": "r/member/{id}"
+      }
+    },
+
+    "survey":
+    {
+      "CREATE": {
+        "method": "POST",
+        "URI": "r/survey"
+      },
+      "GET": {
+        "method": "GET",
+        "URI": "r/survey/{id}"
+      }
+    },
+
+    "email":
+    {
+      "GET": {
+        "method": "GET",
+        "URI": "r/email"
+      }
+    }
+  }
 }
