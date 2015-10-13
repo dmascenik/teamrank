@@ -22,7 +22,7 @@ module.exports = {
    * @param method The HTTP method - e.g. GET, POST, etc.
    */
   registerMethod: function(name, url, method) {
-    if (!validMethod[method]) {
+    if (!validMethods[method]) {
       throw "Invalid HTTP method ("+method+") when registering web service endpoint";
     }
     client.registerMethod(name, url, method);

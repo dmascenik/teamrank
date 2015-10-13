@@ -1,4 +1,5 @@
 var express = require('express');
+var serveStatic = require('serve-static');
 var app = express();
 var webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');
@@ -12,7 +13,14 @@ app.get('/', function (req, res) {
   res.sendFile(__dirname + '/src/static/index.html');
 });
 
-app.use(express.static(__dirname + '/src/static'));
+app.use(serveStatic(__dirname + '/src/static'));
+app.use(serveStatic(__dirname + '/build/mockRestService', {
+   'setHeaders': setHeaders
+ }));
+
+function setHeaders(res, path) {
+  res.setHeader("Content-Type", "application/json");
+}
 
 new WebpackDevServer(webpack(config), {
     publicPath: config.output.publicPath,

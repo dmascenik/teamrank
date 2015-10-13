@@ -8,8 +8,11 @@ repositories {
 
 configurations {
   webRootAssets
+  mockRestService
   provided
 }
+
+def mockRestServiceFileName = 'mock-rest-service.zip'
 
 dependencies {
   compile group: "org.springframework", name: "spring-web", version: "4.1.6.RELEASE"
@@ -37,4 +40,17 @@ war {
   from { 
     configurations.webRootAssets.collect { zipTree(it) }
   }
+}
+
+/**
+ * Final artifacts (JS, HTML, CSS, assets, etc) are zipped into a single artifact
+ */
+task zipMockRestService(type: Zip) {
+  from 'src/test/resources/mockRestService'
+  archiveName = mockRestServiceFileName
+  destinationDir = file('build')
+}
+
+artifacts {
+  mockRestService zipMockRestService
 }

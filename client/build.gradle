@@ -2,6 +2,14 @@ plugins {
   id "com.moowork.node" version "0.10"
 }
 
+configurations {
+  mockRestService
+}
+
+dependencies {
+  mockRestService project(path: ":web", configuration: "mockRestService")
+}
+
 def distFileName = 'app.zip'
 
 task clean(type: Delete) {
@@ -31,6 +39,18 @@ task build(type: NpmTask) {
 	args = ['run', 'package']
 }
 build.dependsOn coverage
+
+task run(dependsOn: 'unpackMockRestService', type: NpmTask)  {
+  args = ['run', 'start']
+}
+
+task unpackMockRestService(type: Copy) {
+  dependsOn configurations.mockRestService
+  from { 
+    configurations.mockRestService.collect { zipTree(it) }
+  }
+  into 'build/mockRestService'
+}
 
 /**
  * Final artifacts (JS, HTML, CSS, assets, etc) are zipped into a single artifact
