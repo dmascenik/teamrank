@@ -5,8 +5,8 @@
   "main": "index.jsx",
   "scripts": {
     "compile": "babel src --out-dir build/js",
-    "coverage": "COVERAGE=true ARTIFACTS_DIR=./build/reports jenkins-mocha test/*.js* test/**/*.js*",
-    "test": "ARTIFACTS_DIR=./build/reports jenkins-mocha --no-coverage test/*.js* test/**/*.js*",
+    "coverage": "COVERAGE=true ARTIFACTS_DIR=./build/reports jenkins-mocha test/**/*.js*",
+    "test": "ARTIFACTS_DIR=./build/reports jenkins-mocha --no-coverage test/**/*.js*",
     "package": "webpack",
     "start": "npm run compile && nodemon server.js"
   },

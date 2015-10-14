@@ -4,43 +4,43 @@
   "resources": 
   {
 
-    "member":
+    "Member":
     {
-      "CREATE": {
+      "create": {
         "method": "POST",
-        "URI": "r/member"
+        "URI": "member"
       },
-      "GET": {
+      "get": {
         "method": "GET",
-        "URI": "r/member/{id}"
+        "URI": "member/{id}"
       },
-      "UPDATE": {
+      "update": {
         "method": "POST",
-        "URI": "r/member/{id}"
+        "URI": "member/{id}"
       },
-      "DELETE": {
+      "delete": {
         "method": "DELETE",
-        "URI": "r/member/{id}"
+        "URI": "member/{id}"
       }
     },
 
-    "survey":
+    "Survey":
     {
-      "CREATE": {
+      "create": {
         "method": "POST",
-        "URI": "r/survey"
+        "URI": "survey"
       },
-      "GET": {
+      "get": {
         "method": "GET",
-        "URI": "r/survey/{id}"
+        "URI": "survey/{id}"
       }
     },
 
-    "email":
+    "Email":
     {
-      "GET": {
+      "get": {
         "method": "GET",
-        "URI": "r/email"
+        "URI": "email"
       }
     }
   }
