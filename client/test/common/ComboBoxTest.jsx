@@ -5,7 +5,7 @@ var assert = require('assert');
 
 
 describe('ComboBox', function() {
-    var ComboBox = require('../src/ComboBox.jsx');
+    var ComboBox = require('../../src/common/ComboBox.jsx');
     //var actionMock = sinon.mock(action);
     //actionMock.expects("getSomething").once().returns("a mock");
     //actionMock.expects("getSomething").never();

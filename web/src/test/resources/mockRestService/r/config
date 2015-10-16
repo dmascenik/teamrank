@@ -1,0 +1,47 @@
+{
+  "version": "1.0-mock",
+
+  "resources": 
+  {
+
+    "Member":
+    {
+      "create": {
+        "method": "POST",
+        "URI": "member"
+      },
+      "get": {
+        "method": "GET",
+        "URI": "member/{id}"
+      },
+      "update": {
+        "method": "POST",
+        "URI": "member/{id}"
+      },
+      "delete": {
+        "method": "DELETE",
+        "URI": "member/{id}"
+      }
+    },
+
+    "Survey":
+    {
+      "create": {
+        "method": "POST",
+        "URI": "survey"
+      },
+      "get": {
+        "method": "GET",
+        "URI": "survey/{id}"
+      }
+    },
+
+    "Email":
+    {
+      "get": {
+        "method": "GET",
+        "URI": "email"
+      }
+    }
+  }
+}

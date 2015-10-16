@@ -28,8 +28,6 @@ class TeamRankApp extends React.Component {
   }
 
   onChange() {
-    console.log("Called with config loaded="+Config.isConfigLoaded()+" and config="+JSON.stringify(Config.getConfig()));
-
     if (Config.isConfigLoaded()) {
       this.setState({
         version: Config.getConfig().version

@@ -2,6 +2,7 @@ var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
 var AppDispatcher = require('../dispatcher');
 var cc = require('../constants').ConfigConstants;
+var ws = require('../../ws');
 
 var CHANGE_EVENT = 'configChange';
 var config = null; // The configuration object loaded from the server
@@ -59,6 +60,7 @@ var ConfigStore = assign({}, EventEmitter.prototype, {
 
       case cc.CONFIG_SUCCESS:
         config = action.config;
+        ws.registerMethods(config);
         isLoaded = true;
         ConfigStore.emitChange();
         break;
@@ -76,3 +78,4 @@ var ConfigStore = assign({}, EventEmitter.prototype, {
 
 });
 module.exports = ConfigStore;
+

@@ -26,7 +26,7 @@ module.exports = {
       throw "Invalid HTTP method ("+method+") when registering web service endpoint";
     }
     if (client.methods[name]) {
-      throw "Cannot register duplicate web service endpoint name: "+name;
+      throw "REST endpoint already registered for name: "+name;
     }
     client.registerMethod(name, url, method);
   },
