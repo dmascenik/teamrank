@@ -4,41 +4,41 @@
   "resources": 
   {
 
-    "Member":
+    "member":
     {
-      "create": {
+      "createMember": {
         "method": "POST",
         "URI": "member"
       },
-      "get": {
+      "getMember": {
         "method": "GET",
         "URI": "member/{id}"
       },
-      "update": {
+      "updateMember": {
         "method": "POST",
         "URI": "member/{id}"
       },
-      "delete": {
+      "deleteMember": {
         "method": "DELETE",
         "URI": "member/{id}"
       }
     },
 
-    "Survey":
+    "survey":
     {
-      "create": {
+      "createSurvey": {
         "method": "POST",
         "URI": "survey"
       },
-      "get": {
+      "getSurvey": {
         "method": "GET",
         "URI": "survey/{id}"
       }
     },
 
-    "Email":
+    "email":
     {
-      "get": {
+      "getEmail": {
         "method": "GET",
         "URI": "email"
       }

@@ -15,7 +15,7 @@ client.registerMethod("getConfig", configUrl, "GET");
 module.exports = {
 
   getConfig: function(pending, onSuccess, onFailure) {
-    this.doCall("getConfig",{},pending,onSuccess,onFailure);
+    client.doCall("getConfig",{},pending,onSuccess,onFailure);
   },
 
   registerMethods: function(config) {
@@ -30,43 +30,10 @@ module.exports = {
 
           // The service URL is relative to the config URL
           var endpointUrl = URL.resolve(configUrl, uri);
-          client.registerMethod(restMethod+resourceName, endpointUrl, httpMethod);
+          client.registerMethod(restMethod, endpointUrl, httpMethod);
         }
       }
     }
-  },
-
-  /**
-   * Wraps a web service call in a promise.
-   *
-   * @param name See RESTClient
-   * @param args See RESTClient
-   * @param pending (optional) No-arg function to call synchronously
-   * @param onSuccess Single-arg function to call with the REST service payload
-                 if a 200 status code is returned
-   * @param onFailure (optional) No-arg function to call if a non-200 status code is returned
-   */
-  doCall: function(name, args, pending, onSuccess, onFailure) {
-    if (pending) {
-      pending();    
-    }
-    new Promise(function(resolve,reject) {
-      client.doCall(name, args, function(data, response) {
-        if (response.statusCode === 200) {
-          resolve(data);
-        } else {
-          reject();
-        }
-      });
-    }).then(
-      function(data) {onSuccess(data); }
-    ).catch(
-      function() { 
-        if (onFailure) {
-          onFailure(); 
-        }
-      }
-    ); 
   }
 
 }
