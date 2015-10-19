@@ -34,11 +34,15 @@
   },
   "dependencies": {
     "es6-promise": "^3.0.2",
+    "fbjs": "^0.2.1",
     "keymirror": "^0.1.1",
+    "material-ui": "^0.12.3",
     "node-rest-client": "^1.5.1",
     "object-assign": "^4.0.1",
     "radium": "^0.13.8",
-    "react": "^0.13.3"
+    "react": "^0.13.3",
+    "react-dom": "^0.14.0",
+    "react-tap-event-plugin": "^0.1.8"
   },
   "bugs": {
     "url": "https://github.com/dmascenik/teamrank/issues"
