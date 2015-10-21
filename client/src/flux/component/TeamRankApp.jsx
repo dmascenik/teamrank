@@ -6,7 +6,8 @@ var ConfigAction = require('../action').ConfigActions;
 
 var style = {
   title: {
-    textAlign: 'left'
+    textAlign: 'left',
+    position: 'fixed'
   }
 }
 
@@ -62,9 +63,11 @@ class TeamRankApp extends React.Component {
               showMenuIconButton={false}
               iconClassNameRight="fa fa-cogs"
               onRightIconButtonTouchTap={this.showAbout}
+              zDepth="1"
            /><center>
               <mui.Card 
-                  style={{width: "50%"}}>
+                  style={{width: "50%", paddingTop: "70px"}}
+                >
                 <mui.CardTitle title="TeamRank" subtitle="Makes ranking stuff better"/>
                 <mui.CardText>
                   Lorem ipsum dolor sit amet, vim ne legimus consequat, duis harum 
