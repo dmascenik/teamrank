@@ -19,6 +19,14 @@ var LoginStore = assign({}, EventEmitter.prototype, {
     return !!user;
   },
 
+  getDisplayName: function() {
+    return this.isLoggedIn() && user.displayName;
+  },
+
+  getAvatarUrl: function() {
+    return this.isLoggedIn() && user.avatarUrl;
+  },
+
   emitChange: function() {
     this.emit(CHANGE_EVENT);
   },

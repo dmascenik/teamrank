@@ -30,18 +30,46 @@ var mui = require('material-ui');
  * avatarUrl (optional) - a URL for the user's avatar image. If none is provided, a "letter avatar" based
  *                        on the user's display name will be used.
  */
+
+var styles = {
+  container: {
+    whiteSpace: "nowrap"
+  },
+  base: {
+    display: "inline-block",
+    verticalAlign: "middle",
+    padding: "5px"
+  }
+};
+
 class LoginInfo extends React.Component {
   constructor(props) {
     super(props);
     this.state = {   };
   }
 
-  render() {   
-    console.log("isSignedIn: "+this.props.isSignedIn());
-    return <div style={{whiteSpace: "nowrap"}}>
-              <div style={{display: "inline-block", verticalAlign: "middle"}}><mui.Avatar>A</mui.Avatar></div>
-              <div style={{display: "inline-block", verticalAlign: "middle"}}><GoogleSignInButton width="135" height="45" onSignIn={this.props.onSignIn} /></div>
-              <div style={{display: "inline-block", verticalAlign: "middle"}}><GoogleSignOutButton onSignOut={this.props.onSignOut} /></div>
+  render() {
+    var avatar;
+    if (this.props.isSignedIn && !this.props.avatarUrl) {
+      var initial = this.props.displayName.substring(0,1).toUpperCase();
+      avatar = <mui.Avatar>{initial}</mui.Avatar>;
+    } else if (this.props.isSignedIn && this.props.avatarUrl) {
+      avatar = <mui.Avatar src={this.props.avatarUrl} />;
+    }
+
+    return <div style={styles.container}>
+              <div style={[styles.base, !this.props.isSignedIn && {display: "none"}]}>
+                {this.props.displayName}
+              </div>
+              <div style={[styles.base, !this.props.isSignedIn && {display: "none"}]}>
+                {avatar}
+              </div>
+              <div style={[styles.base, !this.props.isSignedIn && {display: "none"}]}>
+                <GoogleSignOutButton onSignOut={this.props.onSignOut} />
+              </div>
+              <div style={[styles.base, this.props.isSignedIn && {display: "none"}]}>
+                <GoogleSignInButton width="135" height="45" onSignIn={this.props.onSignIn} />
+              </div>
            </div>;
   }
 

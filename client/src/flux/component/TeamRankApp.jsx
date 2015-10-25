@@ -24,7 +24,7 @@ class TeamRankApp extends React.Component {
     super(props);
     this.state = {
       version: "unknown",
-      username: "unknown"
+      isLoggedIn: false
     }
     this.onChange = this.onChange.bind(this);
     this.showAbout = this.showAbout.bind(this);
@@ -32,11 +32,13 @@ class TeamRankApp extends React.Component {
 
   componentDidMount() {
     Config.addChangeListener(this.onChange);
+    Login.addChangeListener(this.onChange);
     ConfigAction.loadConfig();
   }
 
   componentWillUnmount() {
     Config.removeChangeListener(this.onChange);
+    Login.removeChangeListener(this.onChange);
   }
 
   onChange() {
@@ -45,12 +47,10 @@ class TeamRankApp extends React.Component {
         version: Config.getConfig().version
       });
     }
-    if (Login.isLoggedIn()) {
+    if (Login.isLoggedIn() != this.state.isLoggedIn) {
       this.setState({
-        // update the username
+        isLoggedIn: Login.isLoggedIn()
       });
-    } else {
-      this.setState({username: "Guest"});
     }
   }
 
@@ -63,26 +63,18 @@ class TeamRankApp extends React.Component {
   }
 
   render() {
-
-    // var customAction = <mui.RaisedButton
-    //                 primary={true}
-    //                 onTouchTap={this.hideAbout}>OK</mui.RaisedButton>
-
-// <mui.CardMedia overlay={<mui.CardTitle title="Title" subtitle="Subtitle"/>}>
-//     <img src="http://lorempixel.com/600/337/nature/"/>
-//   </mui.CardMedia>
-
-//           ><LoginInfo /></mui.AppBar><center>
-              // iconClassNameRight="fa fa-cogs"
-              // onRightIconButtonTouchTap={this.showAbout}
-
-
-    var titleText = "TeamRank - "+this.state.username;
-
-    return <div><mui.AppBar title={titleText}
+    var displayName = Login.getDisplayName();
+    var avatarUrl = Login.getAvatarUrl();
+    return <div><mui.AppBar title="TeamRank"
               style={style.title}
               showMenuIconButton={false}
-              iconElementRight={<LoginInfo onSignIn={LoginAction.onSignIn} onSignOut={LoginAction.onSignOut} isSignedIn={Login.isLoggedIn} />}
+              iconElementRight={
+                <LoginInfo onSignIn={LoginAction.onSignIn} 
+                           onSignOut={LoginAction.onSignOut} 
+                           isSignedIn={this.state.isLoggedIn}
+                           displayName={displayName}
+                           avatarUrl={avatarUrl} />
+              }
               zDepth={1}
            ></mui.AppBar><center>
               <mui.Card 
