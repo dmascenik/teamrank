@@ -14,16 +14,15 @@ var React = require("react");
 class GoogleSignInButton extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {   };
     this.onSignIn = this.onSignIn.bind(this);
   }
 
   componentDidMount() {
     gapi.signin2.render('g-signin2', {
         'scope': 'profile email',
-        'width': 200,
-        'height': 64,
-        'longtitle': true,
+        'width': this.props.width,
+        'height': this.props.height,
+        'longtitle': false,
         'theme': 'dark',
         'onsuccess': this.onSignIn
       });
