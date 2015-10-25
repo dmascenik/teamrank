@@ -1,3 +1,4 @@
 module.exports = {
-  ConfigConstants: require('./ConfigConstants')
+  ConfigConstants: require('./ConfigConstants'),
+  LoginConstants: require('./LoginConstants')
 }

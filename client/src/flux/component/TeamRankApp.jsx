@@ -2,6 +2,7 @@ var React = require("react");
 var mui = require('material-ui');
 var Radium = require("radium");
 var Config = require('../store').ConfigStore;
+var Login = require('../store').LoginStore;
 var ConfigAction = require('../action').ConfigActions;
 
 var style = {
@@ -15,7 +16,8 @@ class TeamRankApp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      version: "unknown"
+      version: "unknown",
+      username: "unknown"
     }
     this.onChange = this.onChange.bind(this);
     this.showAbout = this.showAbout.bind(this);
@@ -36,6 +38,13 @@ class TeamRankApp extends React.Component {
         version: Config.getConfig().version
       });
     }
+    if (Login.isLoggedIn()) {
+      this.setState({
+        // update the username
+      });
+    } else {
+      this.setState({username: "Guest"});
+    }
   }
 
   showAbout() {
@@ -48,22 +57,22 @@ class TeamRankApp extends React.Component {
 
   render() {
 
-    var customAction = <mui.RaisedButton
-                    label="OK"
-                    primary={true}
-                    onTouchTap={this.hideAbout} />;
+    // var customAction = <mui.RaisedButton
+    //                 primary={true}
+    //                 onTouchTap={this.hideAbout}>OK</mui.RaisedButton>
 
 // <mui.CardMedia overlay={<mui.CardTitle title="Title" subtitle="Subtitle"/>}>
 //     <img src="http://lorempixel.com/600/337/nature/"/>
 //   </mui.CardMedia>
 
+    var titleText = "TeamRank - "+this.state.username;
 
-    return <div><mui.AppBar title="TeamRank" 
+    return <div><mui.AppBar title={titleText}
               style={style.title}
               showMenuIconButton={false}
               iconClassNameRight="fa fa-cogs"
               onRightIconButtonTouchTap={this.showAbout}
-              zDepth="1"
+              zDepth={1}
            /><center>
               <mui.Card 
                   style={{width: "50%", paddingTop: "70px"}}
@@ -80,7 +89,7 @@ class TeamRankApp extends React.Component {
            </center>
            <mui.Dialog
               title="About TeamRank"
-                actions={customAction}
+                // actions={[{customAction}]}
                 ref="about"
                 modal={false}>
                         Version: {this.state.version}

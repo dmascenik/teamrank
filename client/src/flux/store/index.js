@@ -1,3 +1,4 @@
 module.exports = {
-  ConfigStore: require('./ConfigStore')
+  ConfigStore: require('./ConfigStore'),
+  LoginStore: require('./LoginStore')
 }
