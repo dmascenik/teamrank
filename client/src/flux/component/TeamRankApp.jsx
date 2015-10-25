@@ -4,6 +4,8 @@ var Radium = require("radium");
 var Config = require('../store').ConfigStore;
 var Login = require('../store').LoginStore;
 var ConfigAction = require('../action').ConfigActions;
+var ComboBox = require('../../common').ComboBox;
+var LoginInfo = require('../../common').LoginInfo;
 
 var style = {
   title: {
@@ -65,20 +67,25 @@ class TeamRankApp extends React.Component {
 //     <img src="http://lorempixel.com/600/337/nature/"/>
 //   </mui.CardMedia>
 
+//           ><LoginInfo /></mui.AppBar><center>
+              // iconClassNameRight="fa fa-cogs"
+              // onRightIconButtonTouchTap={this.showAbout}
+
+
     var titleText = "TeamRank - "+this.state.username;
 
     return <div><mui.AppBar title={titleText}
               style={style.title}
               showMenuIconButton={false}
-              iconClassNameRight="fa fa-cogs"
-              onRightIconButtonTouchTap={this.showAbout}
+              iconElementRight={<LoginInfo />}
               zDepth={1}
-           /><center>
+           ></mui.AppBar><center>
               <mui.Card 
                   style={{width: "50%", paddingTop: "70px"}}
                 >
                 <mui.CardTitle title="TeamRank" subtitle="Makes ranking stuff better"/>
                 <mui.CardText>
+                  <ComboBox width="200px"/>
                   Lorem ipsum dolor sit amet, vim ne legimus consequat, duis harum 
                   molestiae duo ut. In duo nihil latine incorrupte. Eum ut esse eius 
                   constituto, admodum mentitum no his. Utroque epicurei expetenda eu 
