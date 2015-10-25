@@ -1,11 +1,16 @@
 var React = require("react");
-var mui = require('material-ui');
 var Radium = require("radium");
+
+// Components
+var ComboBox = require('../../common').ComboBox;
+var LoginInfo = require('../../common').LoginInfo;
+var mui = require('material-ui');
+
+// Flux parts
 var Config = require('../store').ConfigStore;
 var Login = require('../store').LoginStore;
 var ConfigAction = require('../action').ConfigActions;
-var ComboBox = require('../../common').ComboBox;
-var LoginInfo = require('../../common').LoginInfo;
+var LoginAction = require('../action').LoginActions;
 
 var style = {
   title: {
@@ -77,7 +82,7 @@ class TeamRankApp extends React.Component {
     return <div><mui.AppBar title={titleText}
               style={style.title}
               showMenuIconButton={false}
-              iconElementRight={<LoginInfo />}
+              iconElementRight={<LoginInfo onSignIn={LoginAction.onSignIn} onSignOut={LoginAction.onSignOut} isSignedIn={Login.isLoggedIn} />}
               zDepth={1}
            ></mui.AppBar><center>
               <mui.Card 

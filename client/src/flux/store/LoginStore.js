@@ -41,16 +41,14 @@ var LoginStore = assign({}, EventEmitter.prototype, {
     var action = payload.action;
 
     switch(action.actionType) {
-      case c.LOGIN_PENDING:
-        LoginStore.emitChange();
-        break;
-
       case c.LOGIN_SUCCESS:
-        user = action.user;
-        LoginStore.emitChange();
-        break;
-
-      case c.LOGIN_FAILED:
+        user = {
+          displayName: action.displayName,
+          email: action.email,
+          avatarUrl: action.avatarUrl,
+          authProvider: action.authProvider,
+          token: action.token
+        }
         LoginStore.emitChange();
         break;
 

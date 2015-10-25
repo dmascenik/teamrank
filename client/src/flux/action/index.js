@@ -1,3 +1,4 @@
 module.exports = {
-  ConfigActions: require('./ConfigActions')
+  ConfigActions: require('./ConfigActions'),
+  LoginActions: require('./LoginActions')
 }

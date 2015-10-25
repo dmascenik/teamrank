@@ -39,6 +39,8 @@ class GoogleSignInButton extends React.Component {
         // The ID token you need to pass to your backend:
         var id_token = googleUser.getAuthResponse().id_token;
         console.log("ID Token: " + id_token);
+        
+    this.props.onSignIn(profile.getName(), profile.getEmail(), profile.getImageUrl(), "google", googleUser.getAuthResponse().id_token);
   }
 
   render() {

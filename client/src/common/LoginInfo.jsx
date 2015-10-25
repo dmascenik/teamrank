@@ -36,11 +36,12 @@ class LoginInfo extends React.Component {
     this.state = {   };
   }
 
-  render() {
+  render() {   
+    console.log("isSignedIn: "+this.props.isSignedIn());
     return <div style={{whiteSpace: "nowrap"}}>
               <div style={{display: "inline-block", verticalAlign: "middle"}}><mui.Avatar>A</mui.Avatar></div>
-              <div style={{display: "inline-block", verticalAlign: "middle"}}><GoogleSignInButton width="135" height="45" /></div>
-              <div style={{display: "inline-block", verticalAlign: "middle"}}><GoogleSignOutButton /></div>
+              <div style={{display: "inline-block", verticalAlign: "middle"}}><GoogleSignInButton width="135" height="45" onSignIn={this.props.onSignIn} /></div>
+              <div style={{display: "inline-block", verticalAlign: "middle"}}><GoogleSignOutButton onSignOut={this.props.onSignOut} /></div>
            </div>;
   }
 
