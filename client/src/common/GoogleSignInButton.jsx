@@ -17,25 +17,50 @@ class GoogleSignInButton extends React.Component {
     this.onSignIn = this.onSignIn.bind(this);
   }
 
+  /**
+   * Note that the onSuccess callback needs to be registered when the component is mounted.
+   */
   componentDidMount() {
     gapi.signin2.render('g-signin2', {
         'scope': 'profile email',
         'width': this.props.width,
         'height': this.props.height,
         'longtitle': false,
-        'theme': 'dark',
+        'theme': this.props.theme,
         'onsuccess': this.onSignIn
       });
   }
 
+  /**
+   * Calls the onSignIn function prop. In a Flux-based architecture, this would be some
+   * action creator function.
+   */
   onSignIn(googleUser) {
     var profile = googleUser.getBasicProfile();
-    this.props.onSignIn(profile.getName(), profile.getEmail(), profile.getImageUrl(), "google", googleUser.getAuthResponse().id_token);
+    this.props.onSignIn(
+      profile.getName(), 
+      profile.getEmail(), 
+      profile.getImageUrl(), 
+      "google", 
+      googleUser.getAuthResponse().id_token
+    );
   }
 
+  /**
+   * Injects a div with the ID expected by the Google API.
+   */
   render() {
     return <div id="g-signin2" data-onsuccess={this.onSignIn} />
   }
 
 }
+GoogleSignInButton.propTypes = {
+  onSignIn:     React.PropTypes.func.isRequired,
+  width:        React.PropTypes.number,
+  height:       React.PropTypes.number,
+  theme:        React.PropTypes.string
+};
+GoogleSignInButton.defaultProps = {
+  theme:        "dark"
+};
 export default GoogleSignInButton;

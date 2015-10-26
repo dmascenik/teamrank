@@ -63,8 +63,15 @@ class TeamRankApp extends React.Component {
   }
 
   render() {
-    var displayName = Login.getDisplayName();
-    var avatarUrl = Login.getAvatarUrl();
+//    var displayName = Login.getDisplayName();
+//    var avatarUrl = Login.getAvatarUrl();
+
+    var extraProps = {};
+    if (Login.getDisplayName()) extraProps.displayName = Login.getDisplayName();
+    if (Login.getEmail()) extraProps.email = Login.getEmail();
+    if (Login.getAuthProvider()) extraProps.authProvider = Login.getAuthProvider();
+    if (Login.getAvatarUrl()) extraProps.avatarUrl = Login.getAvatarUrl();    
+
     return <div><mui.AppBar title="TeamRank"
               style={style.title}
               showMenuIconButton={false}
@@ -72,8 +79,7 @@ class TeamRankApp extends React.Component {
                 <LoginInfo onSignIn={LoginAction.onSignIn} 
                            onSignOut={LoginAction.onSignOut} 
                            isSignedIn={this.state.isLoggedIn}
-                           displayName={displayName}
-                           avatarUrl={avatarUrl} />
+                           {...extraProps} />
               }
               zDepth={1}
            ></mui.AppBar><center>

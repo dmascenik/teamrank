@@ -1,8 +1,13 @@
 var React = require("react");
-var Radium = require("radium");
 var GoogleSignInButton = require('./GoogleSignInButton');
 var GoogleSignOutButton = require('./GoogleSignOutButton');
 var mui = require('material-ui');
+
+var Radium = require("radium");
+var styles = {
+    container: { whiteSpace: "nowrap" },
+    base:      { display: "inline-block", verticalAlign: "middle", padding: "5px" }
+};
 
 /**
  * This is a composite component that renders the sign-in, sign-out, and current user information.
@@ -30,25 +35,24 @@ var mui = require('material-ui');
  * avatarUrl (optional) - a URL for the user's avatar image. If none is provided, a "letter avatar" based
  *                        on the user's display name will be used.
  */
-
-var styles = {
-  container: {
-    whiteSpace: "nowrap"
-  },
-  base: {
-    display: "inline-block",
-    verticalAlign: "middle",
-    padding: "5px"
-  }
-};
-
 class LoginInfo extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {   };
   }
 
   render() {
+    //
+    // Some conditional validation of the properties
+    //
+    if (this.props.isSignedIn) {
+      if (!this.props.displayName) throw "LoginInfo requires displayName when isSignedIn=true";
+      if (!this.props.email) throw "LoginInfo requires email when isSignedIn=true";
+      if (!this.props.authProvider) throw "LoginInfo requires authProvider when isSignedIn=true";
+    }
+
+    //
+    // Swap a "letter avatar" if no avatarUrl is provided
+    //
     var avatar;
     if (this.props.isSignedIn && !this.props.avatarUrl) {
       var initial = this.props.displayName.substring(0,1).toUpperCase();
@@ -68,11 +72,20 @@ class LoginInfo extends React.Component {
                 <GoogleSignOutButton onSignOut={this.props.onSignOut} />
               </div>
               <div style={[styles.base, this.props.isSignedIn && {display: "none"}]}>
-                <GoogleSignInButton width="135" height="45" onSignIn={this.props.onSignIn} />
+                <GoogleSignInButton width={135} height={45} onSignIn={this.props.onSignIn} />
               </div>
            </div>;
   }
 
 }
+LoginInfo.propTypes = {
+  isSignedIn:   React.PropTypes.bool.isRequired,
+  onSignIn:     React.PropTypes.func.isRequired,
+  onSignOut:    React.PropTypes.func.isRequired,
+  displayName:  React.PropTypes.string,
+  email:        React.PropTypes.string,
+  authProvider: React.PropTypes.string,
+  avatarUrl:    React.PropTypes.string
+};
 LoginInfo = Radium(LoginInfo);
 export default LoginInfo;

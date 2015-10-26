@@ -23,6 +23,14 @@ var LoginStore = assign({}, EventEmitter.prototype, {
     return this.isLoggedIn() && user.displayName;
   },
 
+  getEmail: function() {
+    return this.isLoggedIn() && user.email;
+  },
+
+  getAuthProvider: function() {
+    return this.isLoggedIn() && user.authProvider;
+  },
+
   getAvatarUrl: function() {
     return this.isLoggedIn() && user.avatarUrl;
   },
