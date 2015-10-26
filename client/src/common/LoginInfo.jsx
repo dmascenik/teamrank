@@ -62,7 +62,7 @@ class LoginInfo extends React.Component {
     }
 
     return <div style={styles.container}>
-              <div style={[styles.base, !this.props.isSignedIn && {display: "none"}]}>
+              <div style={[this.props.style && this.props.style, styles.base, !this.props.isSignedIn && {display: "none"}]}>
                 {this.props.displayName}
               </div>
               <div style={[styles.base, !this.props.isSignedIn && {display: "none"}]}>
@@ -85,7 +85,8 @@ LoginInfo.propTypes = {
   displayName:  React.PropTypes.string,
   email:        React.PropTypes.string,
   authProvider: React.PropTypes.string,
-  avatarUrl:    React.PropTypes.string
+  avatarUrl:    React.PropTypes.string,
+  style:        React.PropTypes.object
 };
 LoginInfo = Radium(LoginInfo);
 export default LoginInfo;

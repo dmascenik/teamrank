@@ -1,5 +1,4 @@
 var React = require("react");
-var Radium = require("radium");
 
 // Components
 var ComboBox = require('../../common').ComboBox;
@@ -12,10 +11,15 @@ var Login = require('../store').LoginStore;
 var ConfigAction = require('../action').ConfigActions;
 var LoginAction = require('../action').LoginActions;
 
+var Radium = require("radium");
 var style = {
   title: {
     textAlign: 'left',
     position: 'fixed'
+  },
+  login: {
+    color: 'white',
+    fontWeight: '600'
   }
 }
 
@@ -79,6 +83,7 @@ class TeamRankApp extends React.Component {
                 <LoginInfo onSignIn={LoginAction.onSignIn} 
                            onSignOut={LoginAction.onSignOut} 
                            isSignedIn={this.state.isLoggedIn}
+                           style={style.login}
                            {...extraProps} />
               }
               zDepth={1}
