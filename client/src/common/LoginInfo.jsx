@@ -1,6 +1,5 @@
 var React = require("react");
 var GoogleSignInButton = require('./GoogleSignInButton');
-var GoogleSignOutButton = require('./GoogleSignOutButton');
 var mui = require('material-ui');
 
 var Radium = require("radium");
@@ -38,6 +37,14 @@ var styles = {
 class LoginInfo extends React.Component {
   constructor(props) {
     super(props);
+    this.signOut = this.signOut.bind(this);
+  }
+
+  signOut() {
+    if (this.props.authProvider === "google") {
+      GoogleSignInButton.signOut();
+    }
+    this.props.onSignOut();
   }
 
   render() {
@@ -69,10 +76,13 @@ class LoginInfo extends React.Component {
                 {avatar}
               </div>
               <div style={[styles.base, !this.props.isSignedIn && {display: "none"}]}>
-                <GoogleSignOutButton onSignOut={this.props.onSignOut} />
+                <mui.FlatButton label="Sign Out" onClick={this.signOut} />
               </div>
               <div style={[styles.base, this.props.isSignedIn && {display: "none"}]}>
-                <GoogleSignInButton width={135} height={45} onSignIn={this.props.onSignIn} />
+                <GoogleSignInButton 
+                  width={135} height={45} 
+                  onSignIn={this.props.onSignIn}
+                  onSignOut={this.props.onSignOut} />
               </div>
            </div>;
   }

@@ -56,11 +56,18 @@ class GoogleSignInButton extends React.Component {
 }
 GoogleSignInButton.propTypes = {
   onSignIn:     React.PropTypes.func.isRequired,
+  onSignOut:    React.PropTypes.func.isRequired,
   width:        React.PropTypes.number,
   height:       React.PropTypes.number,
   theme:        React.PropTypes.string
 };
 GoogleSignInButton.defaultProps = {
   theme:        "dark"
+};
+GoogleSignInButton.signOut = function() {
+  var auth2 = gapi.auth2.getAuthInstance();
+  auth2.signOut().then(function () {
+    console.log('User signed out.');
+  });
 };
 export default GoogleSignInButton;
