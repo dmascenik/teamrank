@@ -4,6 +4,7 @@ var React = require("react");
 var ComboBox = require('../../common').ComboBox;
 var LoginInfo = require('../../common').LoginInfo;
 var mui = require('material-ui');
+var tr = require('./composite');
 
 // Flux parts
 var Config = require('../store').ConfigStore;
@@ -13,16 +14,13 @@ var LoginAction = require('../action').LoginActions;
 
 var Radium = require("radium");
 var style = {
-  title: {
-    textAlign: 'left',
-    position: 'fixed'
-  },
-  login: {
-    color: 'white',
-    fontWeight: '600'
-  }
+  title: { textAlign: 'left', position: 'fixed' },
+  login: { color: 'white', fontWeight: '600' }
 }
 
+/**
+ * This is the outermost view-controller of the TeamRank web application.
+ */
 class TeamRankApp extends React.Component {
   constructor(props) {
     super(props);
@@ -31,9 +29,11 @@ class TeamRankApp extends React.Component {
       isLoggedIn: false
     }
     this.onChange = this.onChange.bind(this);
-    this.showAbout = this.showAbout.bind(this);
   }
 
+  /**
+   * Adds listeners to the relevant stores and loads the application configuration.
+   */
   componentDidMount() {
     Config.addChangeListener(this.onChange);
     Login.addChangeListener(this.onChange);
@@ -47,28 +47,18 @@ class TeamRankApp extends React.Component {
 
   onChange() {
     if (Config.isConfigLoaded()) {
-      this.setState({
-        version: Config.getConfig().version
-      });
+      this.setState({ version: Config.getConfig().version });
     }
     if (Login.isLoggedIn() != this.state.isLoggedIn) {
-      this.setState({
-        isLoggedIn: Login.isLoggedIn()
-      });
+      this.setState({ isLoggedIn: Login.isLoggedIn() });
     }
-  }
-
-  showAbout() {
-    this.refs.about.show();
-  }
-
-  hideAbout () {
-    this.refs.about.dismiss();
   }
 
   render() {
-//    var displayName = Login.getDisplayName();
-//    var avatarUrl = Login.getAvatarUrl();
+    // A lot may break if the config hasn't loaded yet
+    if (!Config.isConfigLoaded()) {
+      return <div />
+    }
 
     var extraProps = {};
     if (Login.getDisplayName()) extraProps.displayName = Login.getDisplayName();
@@ -86,11 +76,9 @@ class TeamRankApp extends React.Component {
                            style={style.login}
                            {...extraProps} />
               }
-              zDepth={1}
-           ></mui.AppBar><center>
-              <mui.Card 
-                  style={{width: "50%", paddingTop: "70px"}}
-                >
+              zDepth={1} />
+          <center>
+              <mui.Card style={{width: "50%", paddingTop: "70px"}}>
                 <mui.CardTitle title="TeamRank" subtitle="Makes ranking stuff better"/>
                 <mui.CardText>
                   <ComboBox width="200px"/>
@@ -101,14 +89,8 @@ class TeamRankApp extends React.Component {
                   brute intellegat, per te quando legere.
                 </mui.CardText>
               </mui.Card>
-           </center>
-           <mui.Dialog
-              title="About TeamRank"
-                // actions={[{customAction}]}
-                ref="about"
-                modal={false}>
-                        Version: {this.state.version}
-            </mui.Dialog></div>
+          </center>
+        </div>
   };
 
 }

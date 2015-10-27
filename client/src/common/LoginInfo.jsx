@@ -40,6 +40,9 @@ class LoginInfo extends React.Component {
     this.signOut = this.signOut.bind(this);
   }
 
+  /**
+   * Calls an auth-specific signOut function, then the provided callback
+   */
   signOut() {
     if (this.props.authProvider === "google") {
       GoogleSignInButton.signOut();
