@@ -1,3 +1,4 @@
 module.exports = {
-  Header:   require('./Header')
+  Header:   require('./Header'),
+  Splash:   require('./Splash')
 };

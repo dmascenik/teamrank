@@ -1,4 +1,4 @@
-var React = require("react");
+import React from 'react';
 
 // Components
 var ComboBox = require('../../common').ComboBox;
@@ -50,15 +50,7 @@ class TeamRankApp extends React.Component {
     return <div><tr.Header />
           <center>
               <mui.Card style={{width: "50%", paddingTop: "70px"}}>
-                <mui.CardTitle title="TeamRank" subtitle="Makes ranking stuff better"/>
-                <mui.CardText>
-                  <ComboBox width="200px"/>
-                  Lorem ipsum dolor sit amet, vim ne legimus consequat, duis harum 
-                  molestiae duo ut. In duo nihil latine incorrupte. Eum ut esse eius 
-                  constituto, admodum mentitum no his. Utroque epicurei expetenda eu 
-                  cum, at his quando volumus scriptorem, eos nisl inermis ei. In qui 
-                  brute intellegat, per te quando legere.
-                </mui.CardText>
+                {this.props.children}
               </mui.Card>
           </center>
         </div>
@@ -66,5 +58,4 @@ class TeamRankApp extends React.Component {
 
 }
 TeamRankApp = Radium(TeamRankApp);
-
 export default TeamRankApp;
