@@ -18,6 +18,18 @@ var LoginActions = {
     dispatcher.handleViewAction({
       actionType: constants.LOGOUT
     });
+  },
+
+  enterLoginPage: function() {
+    dispatcher.handleViewAction({
+      actionType: constants.ENTER_LOGIN
+    });
+  },
+
+  leaveLoginPage: function() {
+    dispatcher.handleViewAction({
+      actionType: constants.LEAVE_LOGIN
+    });
   }
 
 };

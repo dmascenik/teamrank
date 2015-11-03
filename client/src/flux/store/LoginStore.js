@@ -6,6 +6,7 @@ var ws = require('../../ws');
 
 var CHANGE_EVENT = 'userChange';
 var user = null; // The current user
+var isOnLoginPage = false;
 
 /**
  * Contains all the information about the currently authenticated user.
@@ -17,6 +18,10 @@ var LoginStore = assign({}, EventEmitter.prototype, {
    */
   isLoggedIn: function() {
     return !!user;
+  },
+
+  isOnLoginPage: function() {
+    return isOnLoginPage;
   },
 
   getDisplayName: function() {
@@ -70,6 +75,16 @@ var LoginStore = assign({}, EventEmitter.prototype, {
 
       case c.LOGOUT:
         user = null;
+        LoginStore.emitChange();
+        break;
+
+      case c.ENTER_LOGIN:
+        isOnLoginPage = true;
+        LoginStore.emitChange();
+        break;
+
+      case c.LEAVE_LOGIN:
+        isOnLoginPage = false;
         LoginStore.emitChange();
         break;
 

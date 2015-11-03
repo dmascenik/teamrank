@@ -24,7 +24,8 @@ class Header extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoggedIn: false
+      isLoggedIn: false,
+      onLoginPage: false
     }
     this.onChange = this.onChange.bind(this);
   }
@@ -41,23 +42,29 @@ class Header extends React.Component {
   }
 
   onChange() {
-    if (LoginStore.isLoggedIn() != this.state.isLoggedIn) {
-      this.setState({ isLoggedIn: LoginStore.isLoggedIn() });
-    }
+    this.setState({ 
+      isLoggedIn: LoginStore.isLoggedIn(),
+      onLoginPage: LoginStore.isOnLoginPage()
+    });
   }
 
   render() {
-    var extraProps = {};
-    if (LoginStore.getDisplayName()) extraProps.displayName = LoginStore.getDisplayName();
-    if (LoginStore.getEmail()) extraProps.email = LoginStore.getEmail();
-    if (LoginStore.getAuthProvider()) extraProps.authProvider = LoginStore.getAuthProvider();
-    if (LoginStore.getAvatarUrl()) extraProps.avatarUrl = LoginStore.getAvatarUrl();    
 
-    var loginInfo = <LoginInfo onSignIn={LoginAction.onSignIn} 
+    // Don't render LoginInfo on login page
+    var loginInfo = null;
+    if (!this.state.onLoginPage) {
+      var extraProps = {};
+      if (LoginStore.getDisplayName()) extraProps.displayName = LoginStore.getDisplayName();
+      if (LoginStore.getEmail()) extraProps.email = LoginStore.getEmail();
+      if (LoginStore.getAuthProvider()) extraProps.authProvider = LoginStore.getAuthProvider();
+      if (LoginStore.getAvatarUrl()) extraProps.avatarUrl = LoginStore.getAvatarUrl();    
+
+      loginInfo = <LoginInfo onSignIn={LoginAction.onSignIn} 
                            onSignOut={LoginAction.onSignOut} 
                            isSignedIn={this.state.isLoggedIn}
                            style={style.login}
                            {...extraProps} />;
+    }
 
     return <mui.AppBar title="TeamRank"
               style={style.title}
