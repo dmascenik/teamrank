@@ -12,6 +12,7 @@ import createBrowserHistory from 'history/lib/createBrowserHistory';
 
 // Routing often needs to know if the user is authenticated
 import { LoginStore } from './flux/store';
+import { LoginActions } from './flux/action';
 
 // The core view-controller of the application
 import TeamRankApp from './flux/component/TeamRankApp.jsx';
@@ -38,6 +39,14 @@ function requireAuth(nextState, replaceState) {
   }
 }
 
+function enterLoginPage() {
+  LoginActions.enterLoginPage();
+}
+
+function leaveLoginPage() {
+  LoginActions.leaveLoginPage();
+}
+
 /***************************************************************************
  *
  * APPLICATION ROUTE CONFIGURATION
@@ -53,7 +62,7 @@ ReactDOM.render((
   <Router history={createBrowserHistory()}>
     <Route path="/" component={TeamRankApp}>
       <IndexRoute component={Splash}/>
-      <Route path="login" component={Login} />
+      <Route path="login" component={Login} onEnter={enterLoginPage} onLeave={leaveLoginPage} />
       <Route path="one" component={LoggedIn1} onEnter={requireAuth} />
     </Route>
   </Router>
