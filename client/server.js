@@ -18,6 +18,10 @@ app.use(serveStatic(__dirname + '/build/mockRestService', {
    'setHeaders': setHeaders
  }));
 
+app.get('*', function (req, res) {
+  res.sendFile(__dirname + '/src/static/index.html');
+});
+
 function setHeaders(res, path) {
   res.setHeader("Content-Type", "application/json");
 }
