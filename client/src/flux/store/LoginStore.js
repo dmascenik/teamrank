@@ -70,21 +70,25 @@ var LoginStore = assign({}, EventEmitter.prototype, {
           authProvider: action.authProvider,
           token: action.token
         }
+        console.log("Emitting login success");
         LoginStore.emitChange();
         break;
 
       case c.LOGOUT:
         user = null;
+        console.log("Emitting logout success");
         LoginStore.emitChange();
         break;
 
       case c.ENTER_LOGIN:
         isOnLoginPage = true;
+        console.log("Emitting enter login");
         LoginStore.emitChange();
         break;
 
       case c.LEAVE_LOGIN:
         isOnLoginPage = false;
+        console.log("Emitting leave login");
         LoginStore.emitChange();
         break;
 

@@ -16,7 +16,7 @@ class Login extends React.Component {
     super(props);
     this.state = {
       // need this to trigger rendering of the Google sign-in button
-      onLoginPage: false
+      onLoginPage: LoginStore.isOnLoginPage()
     };
     this.onChange = this.onChange.bind(this);
     this.onSignIn = this.onSignIn.bind(this);
@@ -24,11 +24,16 @@ class Login extends React.Component {
 
   /**
    * The router triggers enterLoginPage() when it redirects here, but if the
-   * user clicks refresh, we need to trigger here.
+   * user clicks refresh, we need to trigger manually.
    */
+  componentWillMount() {
+    if (!LoginStore.isOnLoginPage()) {
+      LoginActions.enterLoginPage();
+    }
+  }
+
   componentDidMount() {
     LoginStore.addChangeListener(this.onChange);
-    LoginActions.enterLoginPage();
   }
 
   componentWillUnmount() {
@@ -45,6 +50,9 @@ class Login extends React.Component {
    */
   onSignIn(name, email, imageUrl, authProvider, token) {
     LoginActions.onSignIn(name,email,imageUrl,authProvider,token);
+    if (LoginStore.isOnLoginPage()) {
+      LoginActions.leaveLoginPage();
+    }
     const { location } = this.props
     if (location.state && location.state.nextPathname) {
       history.replaceState(null, location.state.nextPathname)
@@ -54,15 +62,21 @@ class Login extends React.Component {
   }
 
   render() {
-    return <div>
-                <mui.CardTitle title="Please Log In" />
-                <GoogleSignInButton
+    console.log("rendering Login page");
+    var googleSignInButton = null;
+    if (this.state.onLoginPage) {
+      googleSignInButton = <GoogleSignInButton
                   onSignIn={this.onSignIn}
                   onSignOut={LoginActions.onSignOut}
                   width={200}
                   height={50}
                   theme="dark"
                 />
+    }
+
+    return <div>
+                <mui.CardTitle title="Please Log In" />
+                {googleSignInButton}
            </div>
   }
 

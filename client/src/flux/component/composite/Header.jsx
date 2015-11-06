@@ -24,8 +24,8 @@ class Header extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoggedIn: false,
-      onLoginPage: false
+      isLoggedIn: LoginStore.isLoggedIn(),
+      onLoginPage: LoginStore.isOnLoginPage()
     }
     this.onChange = this.onChange.bind(this);
   }
@@ -49,6 +49,7 @@ class Header extends React.Component {
   }
 
   render() {
+    console.log("Header triggered: "+JSON.stringify(this.state));
 
     // Don't render LoginInfo on login page
     var loginInfo = null;

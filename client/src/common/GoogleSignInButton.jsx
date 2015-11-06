@@ -21,14 +21,19 @@ class GoogleSignInButton extends React.Component {
    * Note that the onSuccess callback needs to be registered when the component is mounted.
    */
   componentDidMount() {
-    gapi.signin2.render('g-signin2', {
-        'scope': 'profile email',
-        'width': this.props.width,
-        'height': this.props.height,
-        'longtitle': false,
-        'theme': this.props.theme,
-        'onsuccess': this.onSignIn
+      console.log("Rendering GAPI signin2");
+      gapi.signin2.render('g-signin2', {
+          'scope': 'profile email',
+          'width': this.props.width,
+          'height': this.props.height,
+          'longtitle': false,
+          'theme': this.props.theme,
+          'onsuccess': this.onSignIn
       });
+  }
+
+  componentWillUnmount() {
+    console.log("Unmounting signin button");
   }
 
   /**
@@ -50,6 +55,7 @@ class GoogleSignInButton extends React.Component {
    * Injects a div with the ID expected by the Google API.
    */
   render() {
+    console.log("Rendering sign-in div");
     return <div id="g-signin2" data-onsuccess={this.onSignIn} />
   }
 
