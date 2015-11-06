@@ -8,7 +8,7 @@ import ReactDOM from 'react-dom';
  * a specific location in the app.
  */
 import { Router, IndexRoute, Route } from 'react-router';
-import createBrowserHistory from 'history/lib/createBrowserHistory';
+import history from './history.js';
 
 // Routing often needs to know if the user is authenticated
 import { LoginStore } from './flux/store';
@@ -59,7 +59,7 @@ function leaveLoginPage() {
  *
  **************************************************************************/
 ReactDOM.render((
-  <Router history={createBrowserHistory()}>
+  <Router history={history}>
     <Route path="/" component={TeamRankApp}>
       <IndexRoute component={Splash}/>
       <Route path="login" component={Login} onEnter={enterLoginPage} onLeave={leaveLoginPage} />

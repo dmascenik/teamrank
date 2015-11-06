@@ -6,6 +6,7 @@ var GoogleSignInButton = require('../../../common/GoogleSignInButton.jsx');
 
 var LoginActions = require('../../action/LoginActions');
 var LoginStore = require('../../store/LoginStore');
+var history = require('../../../history.js');
 
 // Style management
 var Radium = require("radium");
@@ -18,6 +19,7 @@ class Login extends React.Component {
       onLoginPage: false
     };
     this.onChange = this.onChange.bind(this);
+    this.onSignIn = this.onSignIn.bind(this);
   }
 
   /**
@@ -37,12 +39,25 @@ class Login extends React.Component {
     this.setState({ onLoginPage: LoginStore.isOnLoginPage() });
   }
 
+  /**
+   * Dispatches the login action and redirects the user to the URL originally
+   * requested.
+   */
+  onSignIn(name, email, imageUrl, authProvider, token) {
+    LoginActions.onSignIn(name,email,imageUrl,authProvider,token);
+    const { location } = this.props
+    if (location.state && location.state.nextPathname) {
+      history.replaceState(null, location.state.nextPathname)
+    } else {
+      history.replaceState(null, '/')
+    }
+  }
+
   render() {
-    console.log("Rendering - onLoginPage: "+this.state.onLoginPage);
     return <div>
                 <mui.CardTitle title="Please Log In" />
                 <GoogleSignInButton
-                  onSignIn={LoginActions.onSignIn}
+                  onSignIn={this.onSignIn}
                   onSignOut={LoginActions.onSignOut}
                   width={200}
                   height={50}
