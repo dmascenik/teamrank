@@ -30,4 +30,5 @@ class LoggedIn1 extends React.Component {
 
 }
 LoggedIn1 = Radium(LoggedIn1);
+//LoggedIn1 = Secure(Radium(LoggedIn1));
 export default LoggedIn1;

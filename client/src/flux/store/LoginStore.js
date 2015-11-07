@@ -3,6 +3,7 @@ var assign = require('object-assign');
 var AppDispatcher = require('../dispatcher');
 var c = require('../constants').LoginConstants;
 var ws = require('../../ws');
+var history = require('../../history.js');
 
 var CHANGE_EVENT = 'userChange';
 var user = null; // The current user
@@ -78,6 +79,7 @@ var LoginStore = assign({}, EventEmitter.prototype, {
       case c.LOGOUT:
         if (user != null) {
           user = null;
+          history.replaceState(null, '/');
           LoginStore.emitChange();
         }
         break;
