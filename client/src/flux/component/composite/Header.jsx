@@ -42,15 +42,15 @@ class Header extends React.Component {
   }
 
   onChange() {
-    this.setState({ 
-      isLoggedIn: LoginStore.isLoggedIn(),
-      onLoginPage: LoginStore.isOnLoginPage()
-    });
+    if (this.state.isLoggedIn != LoginStore.isLoggedIn()) {
+      this.setState({ isLoggedIn: LoginStore.isLoggedIn() });
+    }
+    if (this.state.onLoginPage != LoginStore.isOnLoginPage()) {
+      this.setState({ onLoginPage: LoginStore.isOnLoginPage() });
+    }
   }
 
   render() {
-    console.log("Header triggered: "+JSON.stringify(this.state));
-
     // Don't render LoginInfo on login page
     var loginInfo = null;
     if (!this.state.onLoginPage) {

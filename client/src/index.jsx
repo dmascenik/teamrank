@@ -40,15 +40,11 @@ function requireAuth(nextState, replaceState) {
 }
 
 function enterLoginPage() {
-  if (!LoginStore.isOnLoginPage()) {
-    LoginActions.enterLoginPage();
-  }
+  LoginActions.enterLoginPage();
 }
 
 function leaveLoginPage() {
-  if (LoginStore.isOnLoginPage()) {
-    LoginActions.leaveLoginPage();
-  }
+  LoginActions.leaveLoginPage();
 }
 
 /***************************************************************************

@@ -63,33 +63,37 @@ var LoginStore = assign({}, EventEmitter.prototype, {
 
     switch(action.actionType) {
       case c.LOGIN_SUCCESS:
-        user = {
-          displayName: action.displayName,
-          email: action.email,
-          avatarUrl: action.avatarUrl,
-          authProvider: action.authProvider,
-          token: action.token
+        if (user == null) {
+          user = {
+            displayName: action.displayName,
+            email: action.email,
+            avatarUrl: action.avatarUrl,
+            authProvider: action.authProvider,
+            token: action.token
+          }
+          LoginStore.emitChange();
         }
-        console.log("Emitting login success");
-        LoginStore.emitChange();
         break;
 
       case c.LOGOUT:
-        user = null;
-        console.log("Emitting logout success");
-        LoginStore.emitChange();
+        if (user != null) {
+          user = null;
+          LoginStore.emitChange();
+        }
         break;
 
       case c.ENTER_LOGIN:
-        isOnLoginPage = true;
-        console.log("Emitting enter login");
-        LoginStore.emitChange();
+        if (!isOnLoginPage) {
+          isOnLoginPage = true;
+          LoginStore.emitChange();
+        }
         break;
 
       case c.LEAVE_LOGIN:
-        isOnLoginPage = false;
-        console.log("Emitting leave login");
-        LoginStore.emitChange();
+        if (isOnLoginPage) {
+          isOnLoginPage = false;
+          LoginStore.emitChange();
+        }
         break;
 
     }

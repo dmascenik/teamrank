@@ -15,8 +15,8 @@ class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      // need this to trigger rendering of the Google sign-in button
-      onLoginPage: LoginStore.isOnLoginPage()
+      onLoginPage: LoginStore.isOnLoginPage(),
+      hideButton: false
     };
     this.onChange = this.onChange.bind(this);
     this.onSignIn = this.onSignIn.bind(this);
@@ -27,9 +27,7 @@ class Login extends React.Component {
    * user clicks refresh, we need to trigger manually.
    */
   componentWillMount() {
-    if (!LoginStore.isOnLoginPage()) {
-      LoginActions.enterLoginPage();
-    }
+    LoginActions.enterLoginPage();
   }
 
   componentDidMount() {
@@ -49,10 +47,18 @@ class Login extends React.Component {
    * requested.
    */
   onSignIn(name, email, imageUrl, authProvider, token) {
+
+    // Trigger a re-render that hides the sign-in button(s) immediately so that
+    // the Header can render it
+    this.setState({ hideButton: true });
+
+    // Dispatch the sign-in actoin
     LoginActions.onSignIn(name,email,imageUrl,authProvider,token);
-    if (LoginStore.isOnLoginPage()) {
-      LoginActions.leaveLoginPage();
-    }
+
+    // Dispatch that we're leavin the login page
+    LoginActions.leaveLoginPage();
+
+    // Redirect to the original URL, or / if none is known
     const { location } = this.props
     if (location.state && location.state.nextPathname) {
       history.replaceState(null, location.state.nextPathname)
@@ -62,21 +68,19 @@ class Login extends React.Component {
   }
 
   render() {
-    console.log("rendering Login page");
     var googleSignInButton = null;
-    if (this.state.onLoginPage) {
+    if (this.state.onLoginPage && !this.state.hideButton) {
       googleSignInButton = <GoogleSignInButton
                   onSignIn={this.onSignIn}
                   onSignOut={LoginActions.onSignOut}
                   width={200}
                   height={50}
-                  theme="dark"
-                />
+                  theme="dark" />
     }
 
     return <div>
-                <mui.CardTitle title="Please Log In" />
-                {googleSignInButton}
+              <mui.CardTitle title="Please Log In" />
+              {googleSignInButton}
            </div>
   }
 
